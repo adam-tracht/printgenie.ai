@@ -2,9 +2,6 @@ import React from 'react';
 
 const ProductGrid = ({ 
   products, 
-  categories, 
-  selectedCategory, 
-  onCategoryChange, 
   onProductSelect, 
   currentPage, 
   itemsPerPage, 
@@ -21,30 +18,11 @@ const ProductGrid = ({
   }
 
   if (displayedItems.length === 0) {
-    return <div className="text-white text-center">No products found in this category.</div>;
+    return <div className="text-white text-center">No products found.</div>;
   }
 
   return (
     <div>
-      <div className="mb-4">
-        <label htmlFor="product-category" className="block text-sm font-medium text-gray-300 mb-2">
-          Filter by Category
-        </label>
-        <select
-          id="product-category"
-          value={selectedCategory}
-          onChange={onCategoryChange}
-          className="w-full bg-gray-700 border border-gray-600 text-white rounded-md py-2 px-3 focus:outline-none focus:ring-2 focus:ring-purple-500"
-        >
-          <option value="">All Categories</option>
-          {categories.map((category) => (
-            <option key={category} value={category}>
-              {category}
-            </option>
-          ))}
-        </select>
-      </div>
-
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {displayedItems.map((item) => (
           <div key={item.id} className="bg-gray-800 rounded-lg p-4 shadow-lg transition-transform hover:scale-105">

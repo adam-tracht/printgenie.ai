@@ -5,26 +5,23 @@ import ProductDetails from './ProductDetails';
 
 const ProductSelection = ({ image, originalImageUrl, onProductSelected, onVariantSelected, selectedProduct, onMockupGenerated, isGeneratingMockup, setIsGeneratingMockup }) => {
   const [catalogItems, setCatalogItems] = useState([]);
-  const [filteredItems, setFilteredItems] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [localSelectedProduct, setLocalSelectedProduct] = useState(null);
   const [selectedVariant, setSelectedVariant] = useState(null);
   const [mockupUrl, setMockupUrl] = useState(null);
-  const [categories, setCategories] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6;
   const [showGrid, setShowGrid] = useState(true);
 
+  // Allowed categories in the desired order
   const allowedCategories = [
-    "Hoodie",
-    "T-Shirt",
+    "Canvas (in)",
     "Framed Canvas (in)",
-    "Framed Poster With Mat (cm)",
     "Enhanced Matte Paper Poster (in)",
     "Enhanced Matte Paper Framed Poster (in)",
-    "Canvas (in)"
+    "Framed Poster With Mat (cm)",
+    "T-Shirt"
   ];
 
   useEffect(() => {
@@ -51,7 +48,12 @@ const ProductSelection = ({ image, originalImageUrl, onProductSelected, onVarian
           !item.is_discontinued && allowedCategories.includes(item.type_name)
         );
         
-        const categorizedProducts = filteredProducts.map(product => ({
+        // Sort products based on the order of allowedCategories
+        const sortedProducts = filteredProducts.sort((a, b) => {
+          return allowedCategories.indexOf(a.type_name) - allowedCategories.indexOf(b.type_name);
+        });
+
+        const categorizedProducts = sortedProducts.map(product => ({
           ...product,
           category: product.type_name,
         }));
@@ -61,8 +63,6 @@ const ProductSelection = ({ image, originalImageUrl, onProductSelected, onVarian
         }
         
         setCatalogItems(categorizedProducts);
-        setCategories(allowedCategories);
-        setFilteredItems(categorizedProducts);
       } catch (error) {
         console.error('Error fetching catalog items:', error);
         setError(error.message || 'Failed to load catalog items. Please try again.');
@@ -223,17 +223,6 @@ const ProductSelection = ({ image, originalImageUrl, onProductSelected, onVarian
     }
   };
 
-  const handleCategoryChange = (event) => {
-    setSelectedCategory(event.target.value);
-    setCurrentPage(1);
-    if (event.target.value === '') {
-      setFilteredItems(catalogItems);
-    } else {
-      const filtered = catalogItems.filter(item => item.category === event.target.value);
-      setFilteredItems(filtered);
-    }
-  };
-
   const handlePageChange = (newPage) => {
     setCurrentPage(newPage);
   };
@@ -252,10 +241,7 @@ const ProductSelection = ({ image, originalImageUrl, onProductSelected, onVarian
       <p className="text-white mb-6">Select an item on which to print your artwork.</p>
       {showGrid ? (
         <ProductGrid
-          products={filteredItems}
-          categories={categories}
-          selectedCategory={selectedCategory}
-          onCategoryChange={handleCategoryChange}
+          products={catalogItems}
           onProductSelect={handleProductSelect}
           currentPage={currentPage}
           itemsPerPage={itemsPerPage}
@@ -270,7 +256,7 @@ const ProductSelection = ({ image, originalImageUrl, onProductSelected, onVarian
           mockupUrl={mockupUrl}
           isGeneratingMockup={isGeneratingMockup}
           handleBackToGrid={handleBackToGrid}
-          originalImageUrl={originalImageUrl} // Pass the originalImageUrl prop here
+          originalImageUrl={originalImageUrl}
         />
       )}
     </div>
