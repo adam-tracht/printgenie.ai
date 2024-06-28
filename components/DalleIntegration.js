@@ -1,5 +1,5 @@
+// components/DalleIntegration.js
 import React, { useState, useEffect } from 'react';
-import Image from 'next/image';
 import { Send, RefreshCw } from 'lucide-react';
 
 const DalleIntegration = ({ onImageGenerated, initialPrompt }) => {
@@ -7,6 +7,7 @@ const DalleIntegration = ({ onImageGenerated, initialPrompt }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [generatedImageUrl, setGeneratedImageUrl] = useState(null);
+  const [jobId, setJobId] = useState(null);
 
   useEffect(() => {
     if (initialPrompt) {
@@ -14,6 +15,14 @@ const DalleIntegration = ({ onImageGenerated, initialPrompt }) => {
       generateImage(initialPrompt);
     }
   }, [initialPrompt]);
+
+  useEffect(() => {
+    let intervalId;
+    if (jobId) {
+      intervalId = setInterval(checkJobStatus, 2000); // Check every 2 seconds
+    }
+    return () => clearInterval(intervalId);
+  }, [jobId]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -23,6 +32,7 @@ const DalleIntegration = ({ onImageGenerated, initialPrompt }) => {
   const generateImage = async (currentPrompt) => {
     setIsLoading(true);
     setError(null);
+    setGeneratedImageUrl(null);
     
     if (currentPrompt.toLowerCase() === 'test') {
       // Use a placeholder image for testing
@@ -38,20 +48,51 @@ const DalleIntegration = ({ onImageGenerated, initialPrompt }) => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ prompt: currentPrompt }),
+        body: JSON.stringify({ prompt: currentPrompt, action: 'start' }),
       });
 
       if (!response.ok) {
-        throw new Error('Failed to generate image');
+        throw new Error('Failed to start image generation');
       }
 
       const data = await response.json();
-      setGeneratedImageUrl(data.imageUrl);
+      setJobId(data.jobId);
     } catch (error) {
-      console.error('Error generating image:', error);
-      setError('Failed to generate image. Please try again.');
-    } finally {
+      console.error('Error starting image generation:', error);
+      setError('Failed to start image generation. Please try again.');
       setIsLoading(false);
+    }
+  };
+
+  const checkJobStatus = async () => {
+    try {
+      const response = await fetch('/api/generate-image', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ jobId, action: 'status' }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to check job status');
+      }
+
+      const data = await response.json();
+      if (data.status === 'completed') {
+        setGeneratedImageUrl(data.imageUrl);
+        setIsLoading(false);
+        setJobId(null);
+      } else if (data.status === 'failed') {
+        setError('Image generation failed. Please try again.');
+        setIsLoading(false);
+        setJobId(null);
+      }
+    } catch (error) {
+      console.error('Error checking job status:', error);
+      setError('Failed to check job status. Please try again.');
+      setIsLoading(false);
+      setJobId(null);
     }
   };
 
@@ -89,16 +130,8 @@ const DalleIntegration = ({ onImageGenerated, initialPrompt }) => {
       )}
       {generatedImageUrl && (
         <div className="mt-6 md:w-3/4 md:h-3/4 mx-auto">
-          <div className="relative w-full aspect-square">
-            <Image
-              src={generatedImageUrl}
-              alt="Generated artwork"
-              layout="fill"
-              objectFit="contain"
-              className="rounded-lg shadow-lg"
-            />
-          </div>
-          <div className="flex justify-between mt-4">
+          <img src={generatedImageUrl} alt="Generated artwork" className="w-full rounded-lg shadow-lg mb-4" />
+          <div className="flex justify-between">
             <button
               onClick={handleRegenerateImage}
               className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 flex items-center"
