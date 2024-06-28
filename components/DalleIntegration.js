@@ -105,7 +105,7 @@ const DalleIntegration = ({ onImageGenerated, initialPrompt }) => {
   };
 
   return (
-    <div className="max-w-2xl mx-auto p-6 bg-gray-800 rounded-lg shadow-xl">
+    <div className="max-w-2xl mx-auto p-4 sm:p-6 bg-gray-800 rounded-lg shadow-xl">
       <h2 className="text-2xl font-bold text-white mb-4">Create Your AI Artwork</h2>
       <form onSubmit={handleSubmit} className="mb-6">
         <div className="flex">
@@ -114,14 +114,18 @@ const DalleIntegration = ({ onImageGenerated, initialPrompt }) => {
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
             placeholder="Describe your artwork or enter 'test' for a placeholder"
-            className="flex-grow px-4 py-2 rounded-l-lg bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
+            className="flex-grow px-3 py-2 rounded-l-lg bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-purple-500 text-sm sm:text-base"
           />
           <button
             type="submit"
-            className="bg-purple-600 text-white px-4 py-2 rounded-r-lg hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 flex items-center"
+            className="bg-purple-600 text-white px-3 py-2 rounded-r-lg hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 flex items-center justify-center transition-colors duration-200 ease-in-out"
             disabled={isLoading}
           >
-            {isLoading ? 'Generating...' : <Send className="w-5 h-5" />}
+            {isLoading ? (
+              <RefreshCw className="w-5 h-5 animate-spin" />
+            ) : (
+              <Send className="w-5 h-5" />
+            )}
           </button>
         </div>
       </form>
@@ -129,18 +133,18 @@ const DalleIntegration = ({ onImageGenerated, initialPrompt }) => {
         <p className="text-red-500 mb-4">{error}</p>
       )}
       {generatedImageUrl && (
-        <div className="mt-6 md:w-3/4 md:h-3/4 mx-auto">
+        <div className="mt-6">
           <img src={generatedImageUrl} alt="Generated artwork" className="w-full rounded-lg shadow-lg mb-4" />
-          <div className="flex justify-between">
+          <div className="flex flex-col sm:flex-row justify-between gap-2 sm:gap-4">
             <button
               onClick={handleRegenerateImage}
-              className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 flex items-center"
+              className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 flex items-center justify-center transition-colors duration-200 ease-in-out text-sm sm:text-base"
             >
-              <RefreshCw className="w-5 h-5 mr-2" /> Regenerate
+              <RefreshCw className="w-4 h-4 sm:w-5 sm:h-5 mr-2" /> Regenerate
             </button>
             <button
               onClick={handleConfirmImage}
-              className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500"
+              className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 transition-colors duration-200 ease-in-out text-sm sm:text-base"
             >
               Confirm & Continue
             </button>
