@@ -34,7 +34,7 @@ const SupportPage = () => {
           
           <div className="bg-gray-800 rounded-lg p-8 shadow-lg">
             <p className="text-lg mb-6">
-              We're here to help! If you have any questions, issues, or feedback about CanvasGenie.ai, please don't hesitate to reach out to us.
+              We&apos;re here to help! If you have any questions, issues, or feedback about CanvasGenie.ai, please don&apos;t hesitate to reach out to us.
             </p>
             
             <h3 className="text-xl font-semibold mb-4">Contact Information</h3>
@@ -49,12 +49,12 @@ const SupportPage = () => {
                 <p>A: Shipping times may vary depending on your location and the product ordered. Typically, orders are processed within 2-3 business days, and shipping can take an additional 3-7 business days.</p>
               </div>
               <div>
-                <h4 className="font-medium mb-2">Q: Can I modify my order after it's been placed?</h4>
-                <p>A: Due to our automated production process, we're unable to modify orders once they've been placed. If you need to make changes, please contact us as soon as possible, and we'll do our best to assist you.</p>
+                <h4 className="font-medium mb-2">Q: Can I modify my order after it&apos;s been placed?</h4>
+                <p>A: Due to our automated production process, we&apos;re unable to modify orders once they&apos;ve been placed. If you need to make changes, please contact us as soon as possible, and we&apos;ll do our best to assist you.</p>
               </div>
               <div>
-                <h4 className="font-medium mb-2">Q: What if I'm not satisfied with my order?</h4>
-                <p>A: Your satisfaction is our top priority. If you're not happy with your order, please contact us within 14 days of receiving your item, and we'll work with you to make it right.</p>
+                <h4 className="font-medium mb-2">Q: What if I&apos;m not satisfied with my order?</h4>
+                <p>A: Your satisfaction is our top priority. If you&apos;re not happy with your order, please contact us within 14 days of receiving your item, and we&apos;ll work with you to make it right.</p>
               </div>
             </div>
           </div>

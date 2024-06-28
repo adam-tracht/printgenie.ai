@@ -14,7 +14,7 @@ const GeneratedImageDisplay = ({ imageUrl, altText }) => {
           <div className="md:w-1/2 mb-6 md:mb-0 md:pr-8">
             <h3 className="text-2xl font-bold text-purple-400 mb-4">Your AI-Generated Artwork</h3>
             <p className="text-gray-300 mb-4">
-              This is the unique artwork created based on your prompt. It's ready to be printed on your chosen product.
+              This is the unique artwork created based on your prompt. It&apos;s ready to be printed on your chosen product.
             </p>
           </div>
           <div className="md:w-1/2">
