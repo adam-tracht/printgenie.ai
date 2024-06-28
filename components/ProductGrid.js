@@ -1,4 +1,6 @@
+// components/ProductGrid.js
 import React from 'react';
+import GeneratedImageDisplay from './GeneratedImageDisplay';
 
 const ProductGrid = ({ 
   products, 
@@ -6,7 +8,8 @@ const ProductGrid = ({
   currentPage, 
   itemsPerPage, 
   onPageChange,
-  isLoading
+  isLoading,
+  generatedImageUrl
 }) => {
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
@@ -23,6 +26,8 @@ const ProductGrid = ({
 
   return (
     <div>
+
+      
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {displayedItems.map((item) => (
           <div key={item.id} className="bg-gray-800 rounded-lg p-4 shadow-lg transition-transform hover:scale-105">
@@ -63,6 +68,9 @@ const ProductGrid = ({
         >
           Next &rarr;
         </button>
+      </div>
+      <div className="my-8">
+        <GeneratedImageDisplay imageUrl={generatedImageUrl} altText="Your generated artwork" />
       </div>
     </div>
   );

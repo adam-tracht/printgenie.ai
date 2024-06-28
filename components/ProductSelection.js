@@ -246,6 +246,7 @@ const ProductSelection = ({ image, originalImageUrl, onProductSelected, onVarian
           currentPage={currentPage}
           itemsPerPage={itemsPerPage}
           onPageChange={handlePageChange}
+          generatedImageUrl={image} // Pass the generated image URL to ProductGrid
         />
       ) : (
         <ProductDetails
@@ -257,6 +258,7 @@ const ProductSelection = ({ image, originalImageUrl, onProductSelected, onVarian
           isGeneratingMockup={isGeneratingMockup}
           handleBackToGrid={handleBackToGrid}
           originalImageUrl={originalImageUrl}
+          generatedImageUrl={image} // Pass the generated image URL to ProductDetails
         />
       )}
     </div>

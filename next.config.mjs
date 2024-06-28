@@ -6,7 +6,9 @@ const nextConfig = {
   images: {
     domains: [
       'files.cdn.printful.com',
-      'printful-upload.s3-accelerate.amazonaws.com'
+      'printful-upload.s3-accelerate.amazonaws.com',
+      'via.placeholder.com',
+      'oaidalleapiprodscus.blob.core.windows.net'
     ],
   },
 }
