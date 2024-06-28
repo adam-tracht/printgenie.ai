@@ -113,7 +113,7 @@ const DalleIntegration = ({ onImageGenerated, initialPrompt }) => {
             type="text"
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
-            placeholder="Describe your artwork or enter 'test' for a placeholder"
+            placeholder="Describe your vision"
             className="flex-grow px-3 py-2 rounded-l-lg bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-purple-500 text-sm sm:text-base"
           />
           <button
