@@ -11,6 +11,7 @@ const SuccessPage = () => {
   const [mockupUrl, setMockupUrl] = useState(null);
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [emailSent, setEmailSent] = useState(true);
 
   useEffect(() => {
     if (session_id) {
@@ -39,6 +40,7 @@ const SuccessPage = () => {
       const data = await response.json();
       setOrderDetails(data.order);
       setMockupUrl(data.mockupUrl);
+      setEmailSent(data.emailSent);
     } catch (error) {
       console.error('Error handling successful payment:', error);
       setError(`An error occurred while processing your order: ${error.message}. Please contact support with this error message and your session ID: ${sessionId}`);
@@ -79,6 +81,15 @@ const SuccessPage = () => {
         <p className="text-white mb-4">
           Thank you for your purchase! We're excited to create your custom AI-generated artwork.
         </p>
+        {emailSent ? (
+          <p className="text-white mb-4">
+            A confirmation email has been sent to your email address with all the order details.
+          </p>
+        ) : (
+          <p className="text-yellow-400 mb-4">
+            We encountered an issue sending your confirmation email. Don't worry, your order has been processed successfully. Please contact our support team if you need any information about your order.
+          </p>
+        )}
         {orderDetails && (
           <div className="mb-6">
             <p className="text-gray-300 mb-2">

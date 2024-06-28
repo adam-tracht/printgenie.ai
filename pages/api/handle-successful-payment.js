@@ -1,6 +1,7 @@
 // pages/api/handle-successful-payment.js
 import Stripe from 'stripe';
 import axios from 'axios';
+import { sendOrderConfirmationEmail } from '../../utils/emailSender';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 const printfulApi = axios.create({
@@ -37,13 +38,32 @@ export default async function handler(req, res) {
       // Calculate the total from the Stripe session
       const total = session.amount_total / 100; // Convert from cents to dollars
 
-      // Add the total to the order details
+      // Add the total and customer email to the order details
       const orderWithTotal = {
         ...printfulOrder,
-        total: total
+        total: total,
+        recipient: {
+          ...printfulOrder.recipient,
+          email: session.customer_details.email,
+        },
       };
 
-      res.status(200).json({ order: orderWithTotal, mockupUrl });
+      // Send order confirmation email
+      let emailSent = false;
+      try {
+        await sendOrderConfirmationEmail(orderWithTotal, mockupUrl);
+        console.log('Order confirmation email sent successfully');
+        emailSent = true;
+      } catch (emailError) {
+        console.error('Failed to send order confirmation email:', emailError);
+        // Log the error but don't throw, as we still want to return the order details to the client
+      }
+
+      res.status(200).json({ 
+        order: orderWithTotal, 
+        mockupUrl,
+        emailSent // Include this in the response so the client knows if the email was sent
+      });
     } catch (error) {
       console.error('Error handling successful payment:', error);
       res.status(500).json({ error: 'Failed to process payment', details: error.message });
