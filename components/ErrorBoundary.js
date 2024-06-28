@@ -19,7 +19,7 @@ class ErrorBoundary extends React.Component {
       return (
         <div className="text-center p-4 bg-red-100 border border-red-400 text-red-700 rounded">
           <h1 className="text-2xl font-bold mb-2">Oops! Something went wrong.</h1>
-          <p>We're sorry for the inconvenience. Please try refreshing the page or contact support if the problem persists.</p>
+          <p>We&apos;re sorry for the inconvenience. Please try refreshing the page or contact support if the problem persists.</p>
         </div>
       );
     }

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import Image from 'next/image';
 import { Send, RefreshCw } from 'lucide-react';
 
 const DalleIntegration = ({ onImageGenerated, initialPrompt }) => {
@@ -88,8 +89,16 @@ const DalleIntegration = ({ onImageGenerated, initialPrompt }) => {
       )}
       {generatedImageUrl && (
         <div className="mt-6 md:w-3/4 md:h-3/4 mx-auto">
-          <img src={generatedImageUrl} alt="Generated artwork" className="w-full rounded-lg shadow-lg mb-4" />
-          <div className="flex justify-between">
+          <div className="relative w-full aspect-square">
+            <Image
+              src={generatedImageUrl}
+              alt="Generated artwork"
+              layout="fill"
+              objectFit="contain"
+              className="rounded-lg shadow-lg"
+            />
+          </div>
+          <div className="flex justify-between mt-4">
             <button
               onClick={handleRegenerateImage}
               className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 flex items-center"
