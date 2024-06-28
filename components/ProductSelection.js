@@ -29,6 +29,7 @@ const ProductSelection = ({ image, originalImageUrl, onProductSelected, onVarian
       setIsLoading(true);
       setError(null);
       try {
+        console.log('ProductSelection: Fetching catalog items');
         const response = await fetch('/api/printful', {
           method: 'POST',
           headers: {
@@ -42,7 +43,7 @@ const ProductSelection = ({ image, originalImageUrl, onProductSelected, onVarian
         }
 
         const data = await response.json();
-        console.log('Received catalog items:', data.result.length);
+        console.log('ProductSelection: Received catalog items:', data.result.length);
 
         const filteredProducts = data.result.filter(item => 
           !item.is_discontinued && allowedCategories.includes(item.type_name)
@@ -62,9 +63,10 @@ const ProductSelection = ({ image, originalImageUrl, onProductSelected, onVarian
           throw new Error('No active products found in the specified categories.');
         }
         
+        console.log('ProductSelection: Filtered and sorted products:', categorizedProducts.length);
         setCatalogItems(categorizedProducts);
       } catch (error) {
-        console.error('Error fetching catalog items:', error);
+        console.error('ProductSelection: Error fetching catalog items:', error);
         setError(error.message || 'Failed to load catalog items. Please try again.');
       } finally {
         setIsLoading(false);
@@ -75,16 +77,18 @@ const ProductSelection = ({ image, originalImageUrl, onProductSelected, onVarian
   }, []);
 
   useEffect(() => {
-    console.log('selectedProduct updated:', selectedProduct);
+    console.log('ProductSelection: selectedProduct updated:', selectedProduct);
     setLocalSelectedProduct(selectedProduct);
     if (selectedProduct && selectedProduct.variants && selectedProduct.variants.length > 0) {
       const initialVariant = selectedProduct.variants[0];
+      console.log('ProductSelection: Setting initial variant:', initialVariant);
       setSelectedVariant(initialVariant);
       setMockupUrl(null);
     }
   }, [selectedProduct]);
 
   const handleBackToGrid = () => {
+    console.log('ProductSelection: Returning to grid view');
     setShowGrid(true);
     setLocalSelectedProduct(null);
     setSelectedVariant(null);
@@ -96,6 +100,7 @@ const ProductSelection = ({ image, originalImageUrl, onProductSelected, onVarian
   const fetchProductVariants = async (productId) => {
     setIsLoading(true);
     try {
+      console.log('ProductSelection: Fetching product variants for product ID:', productId);
       const response = await fetch('/api/printful', {
         method: 'POST',
         headers: {
@@ -112,11 +117,11 @@ const ProductSelection = ({ image, originalImageUrl, onProductSelected, onVarian
       }
 
       const data = await response.json();
-      console.log('Fetched product details:', data.result);
-      console.log('Fetched variants:', data.result.variants);
+      console.log('ProductSelection: Fetched product details:', data.result);
+      console.log('ProductSelection: Fetched variants:', data.result.variants);
       return data.result.variants;
     } catch (error) {
-      console.error('Error fetching product variants:', error);
+      console.error('ProductSelection: Error fetching product variants:', error);
       setError('Failed to load product variants. Please try again.');
       return [];
     } finally {
@@ -125,11 +130,11 @@ const ProductSelection = ({ image, originalImageUrl, onProductSelected, onVarian
   };
 
   const handleProductSelect = async (product) => {
-    console.log('Product selected:', product);
+    console.log('ProductSelection: Product selected:', product);
     setIsLoading(true);
     const variants = await fetchProductVariants(product.id);
     const updatedProduct = { ...product, variants };
-    console.log('Updated product with variants:', updatedProduct);
+    console.log('ProductSelection: Updated product with variants:', updatedProduct);
     setLocalSelectedProduct(updatedProduct);
     onProductSelected(updatedProduct);
     setSelectedVariant(null);
@@ -139,6 +144,7 @@ const ProductSelection = ({ image, originalImageUrl, onProductSelected, onVarian
   };
 
   const handleVariantSelect = (variant) => {
+    console.log('ProductSelection: Variant selected:', variant);
     setSelectedVariant(variant);
     onVariantSelected(variant);
     setMockupUrl(null);
@@ -146,11 +152,11 @@ const ProductSelection = ({ image, originalImageUrl, onProductSelected, onVarian
 
   const generateMockup = async (product, variant) => {
     if (!product || !variant) {
-      console.error('No product or variant selected');
+      console.error('ProductSelection: No product or variant selected');
       return;
     }
 
-    console.log('Generating mockup for product:', product, 'and variant:', variant);
+    console.log('ProductSelection: Generating mockup for product:', product, 'and variant:', variant);
     setIsGeneratingMockup(true);
     try {
       const response = await fetch('/api/printful', {
@@ -174,7 +180,7 @@ const ProductSelection = ({ image, originalImageUrl, onProductSelected, onVarian
       }
 
       const data = await response.json();
-      console.log('Mockup generation task created:', data);
+      console.log('ProductSelection: Mockup generation task created:', data);
 
       // Poll for mockup result
       const pollMockupResult = async (taskKey) => {
@@ -196,10 +202,10 @@ const ProductSelection = ({ image, originalImageUrl, onProductSelected, onVarian
           }
 
           const resultData = await resultResponse.json();
-          console.log('Mockup generation status:', resultData.result.status);
+          console.log('ProductSelection: Mockup generation status:', resultData.result.status);
 
           if (resultData.result.status === 'completed') {
-            console.log('Mockup generated:', resultData.result.mockups[0].mockup_url);
+            console.log('ProductSelection: Mockup generated:', resultData.result.mockups[0].mockup_url);
             setMockupUrl(resultData.result.mockups[0].mockup_url);
             setIsGeneratingMockup(false);
             onMockupGenerated(resultData.result.mockups[0].mockup_url);
@@ -209,7 +215,7 @@ const ProductSelection = ({ image, originalImageUrl, onProductSelected, onVarian
             setTimeout(() => pollMockupResult(taskKey), 1000);
           }
         } catch (error) {
-          console.error('Error polling mockup result:', error);
+          console.error('ProductSelection: Error polling mockup result:', error);
           setIsGeneratingMockup(false);
           throw error;
         }
@@ -217,13 +223,14 @@ const ProductSelection = ({ image, originalImageUrl, onProductSelected, onVarian
 
       await pollMockupResult(data.result.task_key);
     } catch (error) {
-      console.error('Error generating mockup:', error);
+      console.error('ProductSelection: Error generating mockup:', error);
       setIsGeneratingMockup(false);
       throw error;
     }
   };
 
   const handlePageChange = (newPage) => {
+    console.log('ProductSelection: Page changed to:', newPage);
     setCurrentPage(newPage);
   };
 

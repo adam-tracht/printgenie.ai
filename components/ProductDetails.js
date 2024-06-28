@@ -23,6 +23,7 @@ const ProductDetails = ({
   const [feedbackMessage, setFeedbackMessage] = useState('');
 
   useEffect(() => {
+    console.log('ProductDetails: Product changed', product);
     setError('');
     setLocalSelectedVariant(null);
     setIsMockupGenerated(false);
@@ -30,22 +31,25 @@ const ProductDetails = ({
   }, [product]);
 
   useEffect(() => {
+    console.log('ProductDetails: Mockup URL changed', mockupUrl);
     setIsMockupGenerated(!!mockupUrl);
   }, [mockupUrl]);
 
   const handleVariantSelected = (variant) => {
+    console.log('ProductDetails: Variant selected', variant);
     setLocalSelectedVariant(variant);
     onVariantSelected(variant);
   };
 
   const handleGenerateMockup = async (product, variant) => {
+    console.log('ProductDetails: Generating mockup', { product, variant });
     setError('');
     try {
       await generateMockup(product, variant);
       setIsMockupGenerated(true);
       setFeedbackMessage('');
     } catch (err) {
-      console.error('Mockup generation error:', err);
+      console.error('ProductDetails: Mockup generation error:', err);
       setError('Unable to generate mockup. Please try another product or contact support.');
       setIsMockupGenerated(false);
     }
@@ -58,14 +62,17 @@ const ProductDetails = ({
   };
 
   const handleImageZoom = (imageUrl) => {
+    console.log('ProductDetails: Image zoom', imageUrl);
     setZoomedImage(imageUrl);
   };
 
   const closeZoomedImage = () => {
+    console.log('ProductDetails: Close zoomed image');
     setZoomedImage(null);
   };
 
   const handleDisabledButtonClick = () => {
+    console.log('ProductDetails: Disabled button clicked');
     setFeedbackMessage('Please generate a live preview before proceeding to checkout.');
   };
 

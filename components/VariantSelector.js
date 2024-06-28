@@ -2,34 +2,41 @@
 import React from 'react';
 
 const VariantSelector = ({ 
-  colorVariants, 
-  sizes, 
+  colorVariants = [], 
+  sizes = [], 
   selectedColor, 
   selectedSize, 
   handleColorChange, 
   handleSizeChange, 
   isSizeOutOfStock 
 }) => {
+  console.log('VariantSelector: Props received', {
+    colorVariantsLength: colorVariants.length,
+    sizesLength: sizes.length,
+    selectedColor,
+    selectedSize
+  });
+
   return (
     <div>
-      {colorVariants.length > 0 && (
+      {colorVariants.length > 1 && (
         <div className="mb-4">
           <h4 className="text-lg font-semibold text-white mb-2">Select Color</h4>
           <div className="flex flex-wrap gap-2">
             {colorVariants.map((variant) => (
               <button
                 key={variant.id}
-                onClick={() => handleColorChange(variant.color)}
+                onClick={() => handleColorChange(variant.color || 'default')}
                 className={`w-10 h-10 rounded-full border-2 overflow-hidden ${
-                  selectedColor === variant.color
+                  selectedColor === (variant.color || 'default')
                     ? 'border-purple-600'
                     : 'border-gray-600'
                 }`}
-                title={variant.color}
+                title={variant.color || 'Default'}
               >
                 <img 
                   src={variant.image || '/placeholder-image.jpg'} 
-                  alt={variant.color}
+                  alt={variant.color || 'Default'}
                   className="w-full h-full object-cover"
                 />
               </button>
@@ -64,6 +71,10 @@ const VariantSelector = ({
             <p className="text-red-500 text-xs mt-1">* Out of stock</p>
           )}
         </div>
+      )}
+
+      {colorVariants.length === 0 && sizes.length === 0 && (
+        <p className="text-yellow-500">No variant options available for this product.</p>
       )}
     </div>
   );
