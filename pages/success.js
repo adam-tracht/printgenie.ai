@@ -123,8 +123,8 @@ const SuccessPage = () => {
         )}
         <p className="text-gray-300 mb-4">
           If you have any questions about your order, please contact our support team at{' '}
-          <a href="mailto:hello@printgenie.ai" className="text-purple-400 hover:text-purple-300">
-            hello@printgenie.ai
+          <a href="mailto:hello@canvasgenie.ai" className="text-purple-400 hover:text-purple-300">
+            hello@canvasgenie.ai
           </a>
           .
         </p>
