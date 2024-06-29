@@ -16,7 +16,8 @@ const ProductVariantSelector = ({
   generateMockup, 
   isGeneratingMockup,
   isMockupGenerated,
-  onDisabledCheckoutClick
+  onDisabledCheckoutClick,
+  isMobile
 }) => {
   const [selectedColor, setSelectedColor] = useState('');
   const [selectedSize, setSelectedSize] = useState('');
@@ -147,24 +148,26 @@ const ProductVariantSelector = ({
         </div>
       )}
 
-      <button
-        onClick={handlePreviewClick}
-        disabled={isGeneratingMockup}
-        className={`w-full ${
-          isGeneratingMockup
-            ? 'bg-gray-600 cursor-not-allowed'
-            : 'bg-gray-700 hover:bg-gray-600'
-        } text-white px-4 py-2 rounded-lg transition-colors`}
-      >
-        {isGeneratingMockup ? (
-          <>
-            <Loader2 className="inline mr-2 h-4 w-4 animate-spin" />
-            Generating...
-          </>
-        ) : (
-          'Generate Live Preview'
-        )}
-      </button>
+      {!isMobile && (
+        <button
+          onClick={handlePreviewClick}
+          disabled={isGeneratingMockup}
+          className={`w-full ${
+            isGeneratingMockup
+              ? 'bg-gray-600 cursor-not-allowed'
+              : 'bg-gray-700 hover:bg-gray-600'
+          } text-white px-4 py-2 rounded-lg transition-colors`}
+        >
+          {isGeneratingMockup ? (
+            <>
+              <Loader2 className="inline mr-2 h-4 w-4 animate-spin" />
+              Generating...
+            </>
+          ) : (
+            'Generate Live Preview'
+          )}
+        </button>
+      )}
       
       {feedbackMessage && <p className="text-yellow-500 text-sm mt-2">{feedbackMessage}</p>}
     </div>

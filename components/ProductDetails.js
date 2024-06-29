@@ -21,6 +21,17 @@ const ProductDetails = ({
   const [localSelectedVariant, setLocalSelectedVariant] = useState(null);
   const [isMockupGenerated, setIsMockupGenerated] = useState(false);
   const [feedbackMessage, setFeedbackMessage] = useState('');
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   useEffect(() => {
     console.log('ProductDetails: Product changed', product);
@@ -41,11 +52,11 @@ const ProductDetails = ({
     onVariantSelected(variant);
   };
 
-  const handleGenerateMockup = async (product, variant) => {
-    console.log('ProductDetails: Generating mockup', { product, variant });
+  const handleGenerateMockup = async () => {
+    console.log('ProductDetails: Generating mockup', { product, localSelectedVariant });
     setError('');
     try {
-      await generateMockup(product, variant);
+      await generateMockup(product, localSelectedVariant);
       setIsMockupGenerated(true);
       setFeedbackMessage('');
     } catch (err) {
@@ -77,7 +88,7 @@ const ProductDetails = ({
   };
 
   return (
-    <div className="bg-gray-800 rounded-lg p-4 shadow-lg">
+    <div className="bg-gray-800 rounded-lg p-4 shadow-lg relative pb-24 md:pb-0">
       <div className="flex justify-between items-center mb-4">
         <button
           onClick={handleBackToGrid}
@@ -117,11 +128,12 @@ const ProductDetails = ({
             isGeneratingMockup={isGeneratingMockup}
             isMockupGenerated={isMockupGenerated}
             onDisabledCheckoutClick={handleDisabledButtonClick}
+            isMobile={isMobile}
           />
 
           {error && <p className="text-red-500 text-sm">{error}</p>}
           
-          {localSelectedVariant && (
+          {!isMobile && localSelectedVariant && (
             <div>
               {isMockupGenerated ? (
                 <CheckoutButton
@@ -153,7 +165,7 @@ const ProductDetails = ({
       </div>
       
       {/* GeneratedImageDisplay component placed beneath the product details */}
-      <div className="mt-8">
+      <div className="mt-8 mb-24 md:mb-0">
         <GeneratedImageDisplay imageUrl={generatedImageUrl} altText="Your generated artwork" />
       </div>
 
@@ -163,6 +175,42 @@ const ProductDetails = ({
           <div className="max-w-3xl max-h-3xl">
             <img src={zoomedImage} alt="Zoomed product" className="max-w-full max-h-full" />
           </div>
+        </div>
+      )}
+
+      {/* Sticky footer for mobile */}
+      {isMobile && (
+        <div className="fixed bottom-0 left-0 right-0 bg-gray-800 p-4 border-t border-gray-700">
+          {localSelectedVariant && (
+            <div className="flex flex-col space-y-2">
+              <button
+                onClick={handleGenerateMockup}
+                disabled={isGeneratingMockup || isMockupGenerated}
+                className={`w-full ${
+                  isGeneratingMockup || isMockupGenerated
+                    ? 'bg-gray-600 cursor-not-allowed'
+                    : 'bg-purple-600 hover:bg-purple-700'
+                } text-white px-4 py-2 rounded-lg transition-colors`}
+              >
+                {isGeneratingMockup ? 'Generating...' : isMockupGenerated ? 'Mockup Generated' : 'Generate Mockup'}
+              </button>
+              {isMockupGenerated && (
+                <CheckoutButton
+                  product={{
+                    id: product.id,
+                    name: product.title,
+                  }}
+                  variant={{
+                    id: localSelectedVariant.id,
+                    name: `${localSelectedVariant.color} - ${localSelectedVariant.size}`,
+                    price: localSelectedVariant.sellingPrice
+                  }}
+                  imageUrl={mockupUrl}
+                  originalImageUrl={originalImageUrl}
+                />
+              )}
+            </div>
+          )}
         </div>
       )}
     </div>
