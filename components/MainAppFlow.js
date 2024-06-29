@@ -19,7 +19,7 @@ const Hero = () => (
 
 const steps = [
   { title: 'Generate Your Unique Art', description: '' },
-  { title: 'Choose Your Product', description: '' },
+  { title: 'Choose Your Canvas', description: '' },
   { title: 'Preview and Checkout', description: 'Review your custom product and complete your order' }
 ];
 
