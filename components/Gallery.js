@@ -8,12 +8,13 @@ const Gallery = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const galleryImages = [
-    { src: '/images/gallery/image1.jpg', alt: 'Gallery Image 1' },
-    { src: '/images/gallery/image2.jpg', alt: 'Gallery Image 2' },
-    { src: '/images/gallery/image3.jpg', alt: 'Gallery Image 3' },
-    { src: '/images/gallery/image4.jpg', alt: 'Gallery Image 4' },
-    { src: '/images/gallery/image5.jpg', alt: 'Gallery Image 5' },
     { src: '/images/gallery/image6.jpg', alt: 'Gallery Image 6' },
+    { src: '/images/gallery/image4.jpg', alt: 'Gallery Image 4' },
+    { src: '/images/gallery/image3.jpg', alt: 'Gallery Image 3' },
+    { src: '/images/gallery/image2.jpg', alt: 'Gallery Image 2' },
+    { src: '/images/gallery/image5.jpg', alt: 'Gallery Image 5' },
+    { src: '/images/gallery/image1.jpg', alt: 'Gallery Image 1' },
+
   ];
 
   const openLightbox = (index) => {
@@ -38,10 +39,10 @@ const Gallery = () => {
   };
 
   return (
-    <section className="py-16 bg-gray-900">
+    <section className="py-16 bg-gray-800 rounded-lg">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <h2 className="text-4xl font-extrabold text-white mb-8 text-center">Gallery</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 w-3/4 mx-auto gap-6">
           {galleryImages.map((image, index) => (
             <div key={index} className="relative aspect-square overflow-hidden rounded-lg shadow-lg group">
               <Image
