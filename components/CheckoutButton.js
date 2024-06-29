@@ -5,8 +5,13 @@ import { loadStripe } from '@stripe/stripe-js';
 // Make sure to replace with your actual publishable key
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY);
 
-const CheckoutButton = ({ product, variant, imageUrl, originalImageUrl }) => {
+const CheckoutButton = ({ product, variant, imageUrl, originalImageUrl, isMockupGenerated, setFeedbackMessage }) => {
   const handleCheckout = async () => {
+    if (!isMockupGenerated) {
+      setFeedbackMessage('Please generate a mockup before proceeding to checkout.');
+      return;
+    }
+
     console.log('Checkout button clicked');
     console.log('Product:', product);
     console.log('Variant:', variant);

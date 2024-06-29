@@ -1,3 +1,4 @@
+// components/ProductDetails.js
 import React, { useState, useEffect } from 'react';
 import { ZoomIn } from 'lucide-react';
 import CheckoutButton from './CheckoutButton';
@@ -169,21 +170,21 @@ const ProductDetails = ({
             {isGeneratingMockup ? 'Generating...' : isMockupGenerated ? 'Mockup Generated' : 'Generate Mockup'}
           </button>
           {feedbackMessage && <p className="text-yellow-500 text-sm mt-2">{feedbackMessage}</p>}
-          {isMockupGenerated && (
-            <CheckoutButton
-              product={{
-                id: product.id,
-                name: product.title,
-              }}
-              variant={{
-                id: localSelectedVariant.id,
-                name: `${localSelectedVariant.color} - ${localSelectedVariant.size}`,
-                price: localSelectedVariant.sellingPrice
-              }}
-              imageUrl={mockupUrl}
-              originalImageUrl={originalImageUrl}
-            />
-          )}
+          <CheckoutButton
+            product={{
+              id: product.id,
+              name: product.title,
+            }}
+            variant={localSelectedVariant && {
+              id: localSelectedVariant.id,
+              name: `${localSelectedVariant.color} - ${localSelectedVariant.size}`,
+              price: localSelectedVariant.sellingPrice
+            }}
+            imageUrl={mockupUrl}
+            originalImageUrl={originalImageUrl}
+            isMockupGenerated={isMockupGenerated}
+            setFeedbackMessage={setFeedbackMessage}
+          />
         </div>
       </div>
     </div>
