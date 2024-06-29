@@ -133,33 +133,6 @@ const ProductDetails = ({
 
           {error && <p className="text-red-500 text-sm">{error}</p>}
           
-          {!isMobile && localSelectedVariant && (
-            <div>
-              {isMockupGenerated ? (
-                <CheckoutButton
-                  product={{
-                    id: product.id,
-                    name: product.title,
-                  }}
-                  variant={{
-                    id: localSelectedVariant.id,
-                    name: `${localSelectedVariant.color} - ${localSelectedVariant.size}`,
-                    price: localSelectedVariant.sellingPrice
-                  }}
-                  imageUrl={mockupUrl}
-                  originalImageUrl={originalImageUrl}
-                />
-              ) : (
-                <button
-                  onClick={handleDisabledButtonClick}
-                  className="w-full bg-gray-600 text-white px-6 py-2 rounded-lg cursor-not-allowed"
-                >
-                  Proceed to Checkout
-                </button>
-              )}
-            </div>
-          )}
-          
           {feedbackMessage && <p className="text-yellow-500 text-sm mt-2">{feedbackMessage}</p>}
         </div>
       </div>
@@ -179,10 +152,9 @@ const ProductDetails = ({
       )}
 
       {/* Sticky footer for mobile */}
-      {isMobile && (
         <div className="fixed bottom-0 left-0 right-0 bg-gray-800 p-4 border-t border-gray-700">
           {localSelectedVariant && (
-            <div className="flex flex-col space-y-2">
+            <div className="flex sm:w-3/4 md:w-96 mx-auto flex-col space-y-2">
               <button
                 onClick={handleGenerateMockup}
                 disabled={isGeneratingMockup || isMockupGenerated}
@@ -212,7 +184,6 @@ const ProductDetails = ({
             </div>
           )}
         </div>
-      )}
     </div>
   );
 };

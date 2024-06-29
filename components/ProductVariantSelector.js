@@ -1,4 +1,3 @@
-// components/ProductVariantSelector.js
 import React, { useState, useEffect } from 'react';
 import { Loader2 } from 'lucide-react';
 import VariantSelector from './VariantSelector';
@@ -129,8 +128,15 @@ const ProductVariantSelector = ({
     return variant && variant.in_stock === false;
   };
 
+  const priceDisplay = localSelectedVariant && (
+    <div>
+      <p className="text-2xl font-bold text-purple-400">${localSelectedVariant.sellingPrice.toFixed(2)}</p>
+    </div>
+  );
+
   return (
     <div className="space-y-4">
+      {priceDisplay}
       <VariantSelector
         colorVariants={colorVariants}
         sizes={sizes}
@@ -141,34 +147,6 @@ const ProductVariantSelector = ({
         isSizeOutOfStock={isSizeOutOfStock}
       />
 
-      {localSelectedVariant && (
-        <div>
-          <h4 className="text-lg font-semibold text-white mb-1">Price</h4>
-          <p className="text-2xl font-bold text-purple-400">${localSelectedVariant.sellingPrice.toFixed(2)}</p>
-        </div>
-      )}
-
-      {!isMobile && (
-        <button
-          onClick={handlePreviewClick}
-          disabled={isGeneratingMockup}
-          className={`w-full ${
-            isGeneratingMockup
-              ? 'bg-gray-600 cursor-not-allowed'
-              : 'bg-gray-700 hover:bg-gray-600'
-          } text-white px-4 py-2 rounded-lg transition-colors`}
-        >
-          {isGeneratingMockup ? (
-            <>
-              <Loader2 className="inline mr-2 h-4 w-4 animate-spin" />
-              Generating...
-            </>
-          ) : (
-            'Generate Live Preview'
-          )}
-        </button>
-      )}
-      
       {feedbackMessage && <p className="text-yellow-500 text-sm mt-2">{feedbackMessage}</p>}
     </div>
   );
