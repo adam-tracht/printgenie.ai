@@ -1,3 +1,4 @@
+//components/ProductVariantSelector.js
 import React, { useState, useEffect } from 'react';
 import { Loader2 } from 'lucide-react';
 import VariantSelector from './VariantSelector';

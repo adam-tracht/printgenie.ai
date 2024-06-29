@@ -1,4 +1,3 @@
-// components/ProductDetails.js
 import React, { useState, useEffect } from 'react';
 import { ZoomIn } from 'lucide-react';
 import CheckoutButton from './CheckoutButton';
@@ -53,6 +52,11 @@ const ProductDetails = ({
   };
 
   const handleGenerateMockup = async () => {
+    if (!localSelectedVariant) {
+      setFeedbackMessage('Please select product options first.');
+      return;
+    }
+
     console.log('ProductDetails: Generating mockup', { product, localSelectedVariant });
     setError('');
     try {
@@ -84,7 +88,7 @@ const ProductDetails = ({
 
   const handleDisabledButtonClick = () => {
     console.log('ProductDetails: Disabled button clicked');
-    setFeedbackMessage('Please generate a live preview before proceeding to checkout.');
+    setFeedbackMessage('Please select product options first.');
   };
 
   return (
@@ -152,38 +156,36 @@ const ProductDetails = ({
       )}
 
       {/* Sticky footer for mobile */}
-        <div className="fixed bottom-0 left-0 right-0 bg-gray-800 p-4 border-t border-gray-700">
-          {localSelectedVariant && (
-            <div className="flex sm:w-3/4 md:w-96 mx-auto flex-col space-y-2">
-              <button
-                onClick={handleGenerateMockup}
-                disabled={isGeneratingMockup || isMockupGenerated}
-                className={`w-full ${
-                  isGeneratingMockup || isMockupGenerated
-                    ? 'bg-gray-600 cursor-not-allowed'
-                    : 'bg-purple-600 hover:bg-purple-700'
-                } text-white px-4 py-2 rounded-lg transition-colors`}
-              >
-                {isGeneratingMockup ? 'Generating...' : isMockupGenerated ? 'Mockup Generated' : 'Generate Mockup'}
-              </button>
-              {isMockupGenerated && (
-                <CheckoutButton
-                  product={{
-                    id: product.id,
-                    name: product.title,
-                  }}
-                  variant={{
-                    id: localSelectedVariant.id,
-                    name: `${localSelectedVariant.color} - ${localSelectedVariant.size}`,
-                    price: localSelectedVariant.sellingPrice
-                  }}
-                  imageUrl={mockupUrl}
-                  originalImageUrl={originalImageUrl}
-                />
-              )}
-            </div>
+      <div className="fixed bottom-0 left-0 right-0 bg-gray-800 p-4 border-t border-gray-700">
+        <div className="flex sm:w-3/4 md:w-96 mx-auto flex-col space-y-2">
+          <button
+            onClick={localSelectedVariant ? handleGenerateMockup : handleDisabledButtonClick}
+            className={`w-full ${
+              isGeneratingMockup || isMockupGenerated || !localSelectedVariant
+                ? 'bg-gray-400 cursor-not-allowed'
+                : 'bg-purple-600 hover:bg-purple-700'
+            } text-white px-4 py-2 rounded-lg transition-colors`}
+          >
+            {isGeneratingMockup ? 'Generating...' : isMockupGenerated ? 'Mockup Generated' : 'Generate Mockup'}
+          </button>
+          {feedbackMessage && <p className="text-yellow-500 text-sm mt-2">{feedbackMessage}</p>}
+          {isMockupGenerated && (
+            <CheckoutButton
+              product={{
+                id: product.id,
+                name: product.title,
+              }}
+              variant={{
+                id: localSelectedVariant.id,
+                name: `${localSelectedVariant.color} - ${localSelectedVariant.size}`,
+                price: localSelectedVariant.sellingPrice
+              }}
+              imageUrl={mockupUrl}
+              originalImageUrl={originalImageUrl}
+            />
           )}
         </div>
+      </div>
     </div>
   );
 };
