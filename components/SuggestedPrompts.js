@@ -6,32 +6,32 @@ const SuggestedPrompts = ({ onPromptClick }) => {
   const suggestedItems = [
     {
       type: 'text',
-      content: "Abstract modern minimalist art",
+      content: 'Abstract modern minimalist art',
       image: '/images/gallery/image1.jpg'
     },
     {
       type: 'text',
-      content: "Cyberpunk city with neon lights and flying cars",
+      content: 'Cyberpunk city with neon lights and flying cars',
       image: '/images/gallery/image2.jpg'
     },
     {
       type: 'text',
-      content: "Steampunk-inspired clockwork butterfly",
+      content: 'Steampunk-inspired clockwork butterfly',
       image: '/images/gallery/image3.jpg'
     },
     {
       type: 'text',
-      content: "Miami vaporwave",
+      content: 'Miami vaporwave',
       image: '/images/gallery/image4.jpg'
     },
     {
       type: 'gallery',
-      content: "Astronaut in front of a complex scene of swirling cosmos",
+      content: 'Astronaut in front of a complex scene of swirling cosmos',
       image: '/images/gallery/image5.jpg'
     },
     {
       type: 'gallery',
-      content: "Basquiat style art",
+      content: 'Basquiat style art',
       image: '/images/gallery/image6.jpg'
     }
   ];
@@ -72,7 +72,7 @@ const SuggestedPrompts = ({ onPromptClick }) => {
         <div className="flex flex-col sm:flex-row justify-center items-stretch gap-4">
           {getVisibleItems().map((item, index) => (
             <div key={index} className="w-full sm:w-1/2 lg:w-1/3 bg-gray-800 rounded-lg overflow-hidden shadow-lg flex flex-col">
-              <div className="relative aspect-square flex-grow">
+              <div className="relative w-full h-64">
                 <Image
                   src={item.image}
                   alt={item.content}
@@ -83,13 +83,13 @@ const SuggestedPrompts = ({ onPromptClick }) => {
               </div>
               <div className="p-4 flex flex-col justify-between flex-grow">
                 <p className="text-sm text-gray-300 mb-2">
-                  {item.type === 'gallery' ? 'Gallery Example:' : 'Suggested Prompt:'}
+                  Suggested prompt:
                 </p>
                 <button
                   onClick={() => handlePromptClick(item.content)}
-                  className="w-full h-20 bg-purple-600 text-white text-sm font-medium py-2 px-4 rounded-lg hover:bg-purple-700 transition-colors duration-300 mt-2 flex items-center justify-center"
+                  className="w-full bg-purple-600 text-white text-sm font-medium py-2 px-4 rounded-lg hover:bg-purple-700 transition-colors duration-300 mt-2"
                 >
-                  <span className="text-center">{item.content}</span>
+                  {item.content}
                 </button>
               </div>
             </div>
