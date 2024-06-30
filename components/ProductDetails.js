@@ -158,7 +158,7 @@ const ProductDetails = ({
 
       {/* Sticky footer for mobile */}
       <div className="fixed bottom-0 left-0 right-0 bg-gray-800 p-4 border-t border-gray-700">
-        <div className="flex sm:w-3/4 md:w-96 mx-auto flex-col space-y-2">
+        <div className="flex w-3/4 md:w-96 lg:w-96 mx-auto flex-col space-y-2">
           <button
             onClick={localSelectedVariant ? handleGenerateMockup : handleDisabledButtonClick}
             className={`w-full ${

@@ -6,21 +6,23 @@ import ProductSelection from './ProductSelection';
 import CheckoutButton from './CheckoutButton';
 import SuggestedPrompts from './SuggestedPrompts';
 
+// Enhanced Hero component with more descriptive content
 const Hero = () => (
-  <div className="text-center mb-6">
-    <h2 className="text-3xl font-extrabold text-white mb-2">
-      Your Imagination. AI Art.
-    </h2>
-    <p className="text-lg text-gray-400 max-w-2xl mx-auto">
-      Create unique AI-generated artwork and bring it to life with custom prints
+  <div className="text-center mb-8">
+    <h1 className="text-4xl font-extrabold text-white mb-4">
+      Transform Your Ideas into Custom Wall Art
+    </h1>
+    <p className="md:text-xl text-gray-300 max-w-3xl mx-auto mb-6">
+      CanvasGenie.ai uses advanced AI to turn your text descriptions into unique, 
+      high-quality artwork. Create personalized prints, canvases, shirts and more!
     </p>
   </div>
 );
 
 const steps = [
-  { title: 'Generate Your Unique Art', description: '' },
-  { title: 'Choose Your Canvas', description: '' },
-  { title: 'Preview and Checkout', description: 'Review your custom product and complete your order' }
+  { title: 'Describe Your Vision'},
+  { title: 'Choose Your Canvas'},
+  { title: 'Preview and Checkout'}
 ];
 
 const MainAppFlow = () => {
@@ -127,6 +129,7 @@ const MainAppFlow = () => {
 
   return (
     <div className="max-w-4xl mx-auto p-6 bg-gray-900 rounded-lg shadow-xl">
+      {/* Progress indicator */}
       <div className="mb-8">
         <div className="flex justify-between items-center mb-4">
           {steps.map((step, index) => (
@@ -150,11 +153,14 @@ const MainAppFlow = () => {
             <div style={{ width: `${(currentStep / (steps.length - 1)) * 100}%` }} className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-purple-500 transition-all duration-500"></div>
           </div>
         </div>
-        <p className="text-gray-400 text-center text-sm">{steps[currentStep].description}</p>
       </div>
+
+      {/* Main content area */}
       <div className="transition-opacity duration-300">
         {renderStep()}
       </div>
+
+      {/* Back button */}
       <div className="mt-8 flex justify-between">
         {currentStep > 0 && (
           <button
