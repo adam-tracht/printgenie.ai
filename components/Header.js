@@ -37,9 +37,6 @@ const Header = () => {
             </button>
           ) : (
             <nav>
-              <Link href="/gallery" className="text-gray-300 hover:text-white transition-colors mr-4">
-                Gallery
-              </Link>
               <Link href="/about" className="text-gray-300 hover:text-white transition-colors mr-4">
                 About
               </Link>
@@ -51,9 +48,6 @@ const Header = () => {
         </div>
         {isMobile && isMenuOpen && (
           <nav className="mt-4">
-            <Link href="/gallery" className="block text-gray-300 hover:text-white transition-colors py-2">
-              Gallery
-            </Link>
             <Link href="/about" className="block text-gray-300 hover:text-white transition-colors py-2">
               About
             </Link>

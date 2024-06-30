@@ -54,8 +54,8 @@ const AboutPage = () => {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Hero Section */}
           <section className="text-center mb-12 md:mb-16">
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600 mb-4 md:mb-6">
-              About CanvasGenie.ai: AI-Powered Art Creation
+            <h1 className="text-2xl md:text-2xl lg:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600 mb-4 md:mb-6">
+              About CanvasGenie: AI-Powered Art Creation
             </h1>
             <p className="text-lg md:text-xl text-gray-300 mb-6 md:mb-8">
               Empowering creativity through advanced AI art generation and high-quality custom prints

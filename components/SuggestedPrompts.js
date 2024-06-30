@@ -71,7 +71,7 @@ const SuggestedPrompts = ({ onPromptClick }) => {
       <div className="relative">
         <div className="flex flex-col sm:flex-row justify-center items-stretch gap-4">
           {getVisibleItems().map((item, index) => (
-            <div key={index} className="w-full sm:w-1/2 lg:w-1/3 bg-gray-800 rounded-lg overflow-hidden shadow-lg flex flex-col">
+            <div key={index} className="w-full sm:w-1/2 lg:w-1/3 bg-gray-900 rounded-lg overflow-hidden shadow-lg flex flex-col">
               <div className="relative w-full h-64">
                 <Image
                   src={item.image}

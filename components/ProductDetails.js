@@ -93,7 +93,7 @@ const ProductDetails = ({
   };
 
   return (
-    <div className="bg-gray-800 rounded-lg p-4 shadow-lg relative pb-24 md:pb-0">
+    <div className="bg-gray-900 rounded-lg p-4 shadow-lg relative pb-24 md:pb-0">
       <div className="flex justify-between items-center mb-4">
         <button
           onClick={handleBackToGrid}

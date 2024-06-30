@@ -105,7 +105,7 @@ const DalleIntegration = ({ onImageGenerated, initialPrompt }) => {
   };
 
   return (
-    <div className="max-w-2xl mx-auto p-4 sm:p-6 bg-gray-800 rounded-lg shadow-xl">
+    <div className="max-w-2xl mx-auto p-4 sm:p-6 bg-gray-900 rounded-lg shadow-xl">
       <h2 className="text-2xl font-bold text-white mb-4">Create Your AI Artwork</h2>
       <form onSubmit={handleSubmit} className="mb-6">
         <div className="flex">

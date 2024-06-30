@@ -8,13 +8,12 @@ import SuggestedPrompts from './SuggestedPrompts';
 
 // Enhanced Hero component with more descriptive content
 const Hero = () => (
-  <div className="text-center mb-8">
-    <h1 className="text-4xl font-extrabold text-white mb-4">
+  <div className="text-center mb-8 max-w-2xl mx-auto p-4 sm:p-6 bg-gray-900 rounded-lg shadow-xl">
+    <h1 className="text-2xl font-extrabold text-white mb-4">
       Transform Your Ideas into Custom Wall Art
     </h1>
-    <p className="md:text-xl text-gray-300 max-w-3xl mx-auto mb-6">
-      CanvasGenie.ai uses advanced AI to turn your text descriptions into unique, 
-      high-quality artwork. Create personalized prints, canvases, shirts and more!
+    <p className="md:text-lg text-gray-300 max-w-3xl mx-auto mb-6">
+      CanvasGenie.ai uses AI to turn your descriptions into one-of-a-kind artwork. Create personalized prints, canvases, shirts and more!
     </p>
   </div>
 );
@@ -128,7 +127,7 @@ const MainAppFlow = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-6 bg-gray-900 rounded-lg shadow-xl">
+    <div className="max-w-4xl mx-auto p-6 bg-gray-800 rounded-lg shadow-xl">
       {/* Progress indicator */}
       <div className="mb-8">
         <div className="flex justify-between items-center mb-4">
