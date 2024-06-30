@@ -135,8 +135,8 @@ const AboutPage = () => {
 
       <footer className="bg-gray-800 mt-12 md:mt-16 py-6 md:py-8">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-sm md:text-base text-gray-400">
-          <p>&copy; 2023 CanvasGenie.ai. All rights reserved.</p>
-          <p className="mt-2">Transforming ideas into AI-powered art since 2023.</p>
+          <p>CanvasGenie.ai</p>
+          <p className="mt-2">Transforming ideas into AI-powered art.</p>
         </div>
       </footer>
     </div>
