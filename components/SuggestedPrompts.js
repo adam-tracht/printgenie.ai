@@ -83,7 +83,7 @@ const SuggestedPrompts = ({ onPromptClick }) => {
               </div>
               <div className="p-4 flex flex-col justify-between flex-grow">
                 <p className="text-sm text-gray-300 mb-2">
-                  Suggested prompt:
+                  {item.type === 'gallery' ? 'Suggested Prompt:' : 'Suggested Prompt:'}
                 </p>
                 <button
                   onClick={() => handlePromptClick(item.content)}
