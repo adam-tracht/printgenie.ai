@@ -31,7 +31,7 @@ const Gallery = () => {
     },
     { 
       src: '/images/gallery/image6.jpg', 
-      prompt: 'Basqiuat style art'
+      prompt: 'Basquiat style art'
     },
   ];
 
@@ -82,7 +82,7 @@ const Gallery = () => {
               <div className="p-4">
                 <h3 className="text-lg font-semibold text-white mb-2">{item.alt}</h3>
                 <p className="text-gray-300 text-sm">
-                  Prompt: "{item.prompt}"
+                  Prompt: &quot;{item.prompt}&quot;
                 </p>
               </div>
             </div>
@@ -104,7 +104,7 @@ const Gallery = () => {
             </div>
             <div className="mt-4 text-center">
               <h3 className="text-xl font-semibold text-white mb-2">{selectedImage.alt}</h3>
-              <p className="text-gray-300">Prompt: "{selectedImage.prompt}"</p>
+              <p className="text-gray-300">Prompt: &quot;{selectedImage.prompt}&quot;</p>
             </div>
             <button
               className="absolute top-4 right-4 text-white text-2xl bg-gray-800 rounded-full p-2 hover:bg-gray-700 transition-colors"
