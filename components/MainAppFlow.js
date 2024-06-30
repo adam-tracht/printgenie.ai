@@ -13,7 +13,7 @@ const Hero = () => (
       Transform Your Ideas into Custom Wall Art
     </h1>
     <p className="md:text-lg text-gray-300 max-w-3xl mx-auto mb-6">
-      CanvasGenie.ai uses AI and print-on-demand services to turn your descriptions into unique pieces. Create personalized prints, canvases, shirts and more!
+      CanvasGenie.ai uses AI and print-on-demand services to turn your concepts into unique, physical art pieces. Print custom canvases, shirts, and more!
     </p>
   </div>
 );
