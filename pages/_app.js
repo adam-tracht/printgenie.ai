@@ -1,5 +1,14 @@
-import "@/styles/globals.css";
+// pages/_app.js
+import '../styles/globals.css'
+import ClarityAnalytics from '../components/ClarityAnalytics'
 
-export default function App({ Component, pageProps }) {
-  return <Component {...pageProps} />;
+function MyApp({ Component, pageProps }) {
+  return (
+    <>
+      <ClarityAnalytics />
+      <Component {...pageProps} />
+    </>
+  )
 }
+
+export default MyApp
