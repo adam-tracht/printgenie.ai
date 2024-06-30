@@ -244,7 +244,7 @@ const ProductSelection = ({ image, originalImageUrl, onProductSelected, onVarian
 
   return (
     <div>
-      <h2 className="text-2xl font-bold text-white mb-2">Choose Your Product</h2>
+      <h2 className="text-2xl font-bold text-white mb-2">Step 2: Choose Your Canvas</h2>
       <p className="text-white mb-6">Select an item on which to print your artwork.</p>
       {showGrid ? (
         <ProductGrid
