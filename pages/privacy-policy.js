@@ -50,7 +50,7 @@ const PrivacyPolicy = () => {
               <li>Geographic location (country and city level only)</li>
             </ul>
             <p className="mb-4">
-              This data is used to improve our website's user interface, identify and fix bugs, and enhance the overall user experience of CanvasGenie.ai.
+              This data is used to improve our website user interface, identify and fix bugs, and enhance the overall user experience of CanvasGenie.ai.
             </p>
 
             <h3 className="text-xl font-semibold mb-2">Your Rights and Choices</h3>

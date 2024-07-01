@@ -31,7 +31,7 @@ const Gallery = () => {
     },
     { 
       src: '/images/gallery/image6.jpg', 
-      prompt: 'Basquiat style art'
+      prompt: 'Basquiat style messy'
     },
   ];
 

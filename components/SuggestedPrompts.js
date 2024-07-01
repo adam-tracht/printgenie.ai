@@ -12,7 +12,7 @@ const SuggestedPrompts = ({ onPromptClick }) => {
     ,
     {
       type: 'gallery',
-      content: 'Basquiat style art',
+      content: 'Basquiat style messy',
       image: '/images/gallery/image6.jpg'
     },
     {

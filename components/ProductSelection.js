@@ -84,18 +84,15 @@ const ProductSelection = ({ image, originalImageUrl, onProductSelected, onVarian
       console.log('ProductSelection: Setting initial variant:', initialVariant);
       setSelectedVariant(initialVariant);
       setMockupUrl(null);
+      setShowGrid(false);
+    } else {
+      // Reset state when selectedProduct becomes null
+      setLocalSelectedProduct(null);
+      setSelectedVariant(null);
+      setMockupUrl(null);
+      setShowGrid(true);
     }
   }, [selectedProduct]);
-
-  const handleBackToGrid = () => {
-    console.log('ProductSelection: Returning to grid view');
-    setShowGrid(true);
-    setLocalSelectedProduct(null);
-    setSelectedVariant(null);
-    setMockupUrl(null);
-    onProductSelected(null);
-    onVariantSelected(null);
-  };
 
   const fetchProductVariants = async (productId) => {
     setIsLoading(true);
@@ -263,7 +260,6 @@ const ProductSelection = ({ image, originalImageUrl, onProductSelected, onVarian
           generateMockup={generateMockup}
           mockupUrl={mockupUrl}
           isGeneratingMockup={isGeneratingMockup}
-          handleBackToGrid={handleBackToGrid}
           originalImageUrl={originalImageUrl}
           generatedImageUrl={image} // Pass the generated image URL to ProductDetails
         />

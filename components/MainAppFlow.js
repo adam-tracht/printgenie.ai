@@ -13,15 +13,15 @@ const Hero = () => (
       Transform Your Ideas into Custom Wall Art
     </h1>
     <p className="md:text-lg text-gray-300 max-w-3xl mx-auto mb-6">
-      CanvasGenie.ai uses AI and print-on-demand services to turn your concepts into unique physical art pieces. Print custom canvases, shirts, and more!
+      CanvasGenie.ai uses AI to turn your descriptions into one-of-a-kind artwork. Create personalized prints, canvases, shirts and more!
     </p>
   </div>
 );
 
 const steps = [
-  { title: 'Describe Your Vision'},
-  { title: 'Choose Your Canvas'},
-  { title: 'Preview and Checkout'}
+  { title: 'Describe Your Vision', description: 'Use AI to generate your custom artwork' },
+  { title: 'Choose Your Canvas', description: 'Select the perfect product for your art' },
+  { title: 'Preview and Checkout', description: 'Review your creation and complete your order' }
 ];
 
 const MainAppFlow = () => {
@@ -66,7 +66,36 @@ const MainAppFlow = () => {
   };
 
   const handleBack = () => {
-    setCurrentStep(currentStep - 1);
+    if (currentStep === 1 && selectedProduct) {
+      // If a product is selected, go back to product grid
+      setSelectedProduct(null);
+      setSelectedVariant(null);
+      setMockupImage(null);
+    } else {
+      // Otherwise, go back to the previous step
+      setCurrentStep(currentStep - 1);
+    }
+  };
+
+  const renderBackButton = () => {
+    if (currentStep === 0) return null;
+
+    let buttonText = 'Back to Image Generation';
+    if (currentStep === 1) {
+      buttonText = selectedProduct ? 'Back to All Products' : 'Back to Image Generation';
+    } else if (currentStep === 2) {
+      buttonText = 'Back to Product Selection';
+    }
+
+    return (
+      <button
+        onClick={handleBack}
+        className="flex items-center text-gray-300 hover:text-white transition-colors bg-gray-700 hover:bg-gray-600 px-4 py-2 rounded-lg shadow-md"
+      >
+        <ChevronLeft className="mr-2" size={20} />
+        {buttonText}
+      </button>
+    );
   };
 
   const renderStep = () => {
@@ -111,9 +140,13 @@ const MainAppFlow = () => {
                 <p className="text-xl text-white mb-6">Price: ${selectedVariant.price}</p>
                 <CheckoutButton 
                   product={{
+                    id: selectedProduct.id,
                     name: `${selectedProduct.title} - ${selectedVariant.name}`,
+                  }}
+                  variant={{
+                    id: selectedVariant.id,
                     price: selectedVariant.price
-                  }} 
+                  }}
                   imageUrl={mockupImage}
                   originalImageUrl={originalImageUrl}
                 />
@@ -154,22 +187,14 @@ const MainAppFlow = () => {
         </div>
       </div>
 
+      {/* Back button */}
+      <div className="mb-6">
+        {renderBackButton()}
+      </div>
+
       {/* Main content area */}
       <div className="transition-opacity duration-300">
         {renderStep()}
-      </div>
-
-      {/* Back button */}
-      <div className="mt-8 flex justify-between">
-        {currentStep > 0 && (
-          <button
-            onClick={handleBack}
-            className="flex items-center text-gray-300 hover:text-white transition-colors"
-          >
-            <ChevronLeft className="mr-2" />
-            {currentStep === 1 ? 'Back to Image Generation' : 'Back to Product Selection'}
-          </button>
-        )}
       </div>
     </div>
   );

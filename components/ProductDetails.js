@@ -12,7 +12,6 @@ const ProductDetails = ({
   generateMockup, 
   mockupUrl, 
   isGeneratingMockup, 
-  handleBackToGrid,
   originalImageUrl,
   generatedImageUrl
 }) => {
@@ -92,27 +91,30 @@ const ProductDetails = ({
     setFeedbackMessage('Please select product options first.');
   };
 
+  // Early return if product is null
+  if (!product) {
+    return null;
+  }
+
+  const productImage = mockupUrl || 
+    (localSelectedVariant && localSelectedVariant.image) || 
+    product.thumbnail_url || 
+    product.image || 
+    '/placeholder-image.jpg';
+
   return (
     <div className="bg-gray-900 rounded-lg p-4 shadow-lg relative pb-24 md:pb-0">
-      <div className="flex justify-between items-center mb-4">
-        <button
-          onClick={handleBackToGrid}
-          className="bg-gray-700 hover:bg-gray-600 text-white font-semibold py-2 px-4 rounded transition-colors"
-        >
-          Back to All Products
-        </button>
-      </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
         <div className="space-y-4">
           <div className="relative aspect-w-1 aspect-h-1">
             <img 
-              src={mockupUrl || (localSelectedVariant && localSelectedVariant.image) || product.thumbnail_url || product.image || '/placeholder-image.jpg'} 
+              src={productImage}
               alt={product.title} 
               className="object-cover w-full h-full rounded-lg"
             />
             <button 
               className="absolute bottom-2 right-2 bg-gray-800 text-white p-2 rounded-full hover:bg-gray-700 transition-colors"
-              onClick={() => handleImageZoom(mockupUrl || (localSelectedVariant && localSelectedVariant.image) || product.thumbnail_url || product.image)}
+              onClick={() => handleImageZoom(productImage)}
             >
               <ZoomIn size={20} />
             </button>
