@@ -4,7 +4,6 @@ import { ChevronLeft } from 'lucide-react';
 import DalleIntegration from './DalleIntegration';
 import ProductSelection from './ProductSelection';
 import CheckoutButton from './CheckoutButton';
-import SuggestedPrompts from './SuggestedPrompts';
 
 // Enhanced Hero component with more descriptive content
 const Hero = () => (
@@ -13,15 +12,15 @@ const Hero = () => (
       Transform Your Ideas into Custom Wall Art
     </h1>
     <p className="md:text-lg text-gray-300 max-w-3xl mx-auto mb-6">
-      CanvasGenie.ai uses AI to turn your descriptions into one-of-a-kind physical artwork. Create unique prints, canvases, shirts and more!
+      CanvasGenie.ai uses AI to turn your descriptions into one-of-a-kind artwork. Create personalized prints, canvases, shirts and more!
     </p>
   </div>
 );
 
 const steps = [
-  { title: 'Describe Your Vision', description: 'Use AI to generate your custom artwork' },
-  { title: 'Choose Your Canvas', description: 'Select the perfect product for your art' },
-  { title: 'Preview and Checkout', description: 'Review your creation and complete your order' }
+  { title: 'Choose Your Style'},
+  { title: 'Select Your Canvas'},
+  { title: 'Preview and Checkout'}
 ];
 
 const MainAppFlow = () => {
@@ -32,7 +31,6 @@ const MainAppFlow = () => {
   const [selectedVariant, setSelectedVariant] = useState(null);
   const [mockupImage, setMockupImage] = useState(null);
   const [isGeneratingMockup, setIsGeneratingMockup] = useState(false);
-  const [prompt, setPrompt] = useState('');
 
   const handleImageGenerated = (imageUrl) => {
     console.log('Image generated:', imageUrl);
@@ -61,41 +59,8 @@ const MainAppFlow = () => {
     setCurrentStep(2);
   };
 
-  const handlePromptClick = (newPrompt) => {
-    setPrompt(newPrompt);
-  };
-
   const handleBack = () => {
-    if (currentStep === 1 && selectedProduct) {
-      // If a product is selected, go back to product grid
-      setSelectedProduct(null);
-      setSelectedVariant(null);
-      setMockupImage(null);
-    } else {
-      // Otherwise, go back to the previous step
-      setCurrentStep(currentStep - 1);
-    }
-  };
-
-  const renderBackButton = () => {
-    if (currentStep === 0) return null;
-
-    let buttonText = 'Back to Image Generation';
-    if (currentStep === 1) {
-      buttonText = selectedProduct ? 'Back to All Products' : 'Back to Image Generation';
-    } else if (currentStep === 2) {
-      buttonText = 'Back to Product Selection';
-    }
-
-    return (
-      <button
-        onClick={handleBack}
-        className="flex items-center text-gray-300 hover:text-white transition-colors bg-gray-700 hover:bg-gray-600 px-4 py-2 rounded-lg shadow-md"
-      >
-        <ChevronLeft className="mr-2" size={20} />
-        {buttonText}
-      </button>
-    );
+    setCurrentStep(currentStep - 1);
   };
 
   const renderStep = () => {
@@ -104,8 +69,7 @@ const MainAppFlow = () => {
         return (
           <>
             <Hero />
-            <DalleIntegration onImageGenerated={handleImageGenerated} initialPrompt={prompt} />
-            <SuggestedPrompts onPromptClick={handlePromptClick} />
+            <DalleIntegration onImageGenerated={handleImageGenerated} />
           </>
         );
       case 1:
@@ -145,6 +109,7 @@ const MainAppFlow = () => {
                   }}
                   variant={{
                     id: selectedVariant.id,
+                    name: selectedVariant.name,
                     price: selectedVariant.price
                   }}
                   imageUrl={mockupImage}
@@ -187,14 +152,22 @@ const MainAppFlow = () => {
         </div>
       </div>
 
-      {/* Back button */}
-      <div className="mb-6">
-        {renderBackButton()}
-      </div>
-
       {/* Main content area */}
       <div className="transition-opacity duration-300">
         {renderStep()}
+      </div>
+
+      {/* Back button */}
+      <div className="mt-8 flex justify-between">
+        {currentStep > 0 && (
+          <button
+            onClick={handleBack}
+            className="flex items-center text-gray-300 hover:text-white transition-colors"
+          >
+            <ChevronLeft className="mr-2" />
+            {currentStep === 1 ? 'Back to Style Selection' : 'Back to Product Selection'}
+          </button>
+        )}
       </div>
     </div>
   );

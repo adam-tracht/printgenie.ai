@@ -14,23 +14,22 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method Not Allowed' });
   }
 
-  const { prompt, action } = req.body;
+  const { prompt, action, jobId } = req.body;
 
   if (action === 'start') {
     if (!prompt) {
       return res.status(400).json({ error: 'Prompt is required' });
     }
 
-    const jobId = uuidv4();
-    jobStatus.set(jobId, { status: 'processing' });
+    const newJobId = uuidv4();
+    jobStatus.set(newJobId, { status: 'processing' });
 
     // Start the image generation process asynchronously
-    generateImage(jobId, prompt);
+    generateImage(newJobId, prompt);
 
     // Immediately return the job ID to the client
-    res.status(202).json({ jobId, message: 'Image generation started' });
+    res.status(202).json({ jobId: newJobId, message: 'Image generation started' });
   } else if (action === 'status') {
-    const { jobId } = req.body;
     if (!jobId) {
       return res.status(400).json({ error: 'Job ID is required' });
     }
@@ -48,6 +47,7 @@ export default async function handler(req, res) {
 
 async function generateImage(jobId, prompt) {
   try {
+    console.log(`Generating image for job ${jobId} with prompt: ${prompt}`);
     const response = await openai.images.generate({
       model: "dall-e-3",
       prompt: prompt,
@@ -55,10 +55,12 @@ async function generateImage(jobId, prompt) {
       size: "1024x1024",
     });
 
+    console.log('OpenAI API response:', response);
     const imageUrl = response.data[0].url;
+    console.log(`Image generated successfully for job ${jobId}. URL: ${imageUrl}`);
     jobStatus.set(jobId, { status: 'completed', imageUrl });
   } catch (error) {
-    console.error('Error generating image:', error);
+    console.error(`Error generating image for job ${jobId}:`, error);
     jobStatus.set(jobId, { status: 'failed', error: error.message });
   }
 }
