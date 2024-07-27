@@ -23,6 +23,7 @@ const MainAppFlow = () => {
   const [mockupImage, setMockupImage] = useState(null);
   const [isGeneratingMockup, setIsGeneratingMockup] = useState(false);
   const [feedbackMessage, setFeedbackMessage] = useState('');
+  const [isImageConfirmed, setIsImageConfirmed] = useState(false);
 
   const step2Ref = useRef(null);
   const step3Ref = useRef(null);
@@ -31,6 +32,10 @@ const MainAppFlow = () => {
     console.log('Image generated:', imageUrl);
     setGeneratedImage(imageUrl);
     setOriginalImageUrl(imageUrl);
+  };
+
+  const handleImageConfirmed = () => {
+    setIsImageConfirmed(true);
     if (step2Ref.current) {
       step2Ref.current.scrollIntoView({ behavior: 'smooth' });
     }
@@ -44,15 +49,15 @@ const MainAppFlow = () => {
   const handleVariantSelected = (variant) => {
     console.log("Variant selected in MainAppFlow:", variant);
     setSelectedVariant(variant);
-    if (step3Ref.current) {
-      step3Ref.current.scrollIntoView({ behavior: 'smooth' });
-    }
   };
 
   const handleMockupGenerated = (mockupUrl) => {
     console.log("Mockup generated in MainAppFlow:", mockupUrl);
     setMockupImage(mockupUrl);
     setIsGeneratingMockup(false);
+    if (step3Ref.current) {
+      step3Ref.current.scrollIntoView({ behavior: 'smooth' });
+    }
   };
 
   return (
@@ -61,13 +66,16 @@ const MainAppFlow = () => {
 
       {/* Step 1: Create Artwork */}
       <section className="mb-12">
-        <DalleIntegration onImageGenerated={handleImageGenerated} />
+        <DalleIntegration 
+          onImageGenerated={handleImageGenerated} 
+          onImageConfirmed={handleImageConfirmed}
+        />
       </section>
 
       {/* Step 2: Select Product */}
-      <section ref={step2Ref} className={`mb-12 ${!generatedImage ? 'opacity-50 pointer-events-none' : ''}`}>
-        {!generatedImage && (
-          <p className="text-gray-300 mb-4">Please generate an artwork in Step 1 to unlock this step.</p>
+      <section ref={step2Ref} className={`mb-12 ${!isImageConfirmed ? 'opacity-50 pointer-events-none' : ''}`}>
+        {!isImageConfirmed && (
+          <p className="text-gray-300 mb-4">Please confirm your artwork in Step 1 to unlock this step.</p>
         )}
         <ProductSelection 
           image={generatedImage}

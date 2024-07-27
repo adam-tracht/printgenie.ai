@@ -1,15 +1,16 @@
 // components/DalleIntegration.js
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Send, RefreshCw, Info } from 'lucide-react';
 import ArtStyleSlider from './ArtStyleSlider';
 
-const DalleIntegration = ({ onImageGenerated, initialPrompt }) => {
+const DalleIntegration = ({ onImageGenerated, onImageConfirmed, initialPrompt }) => {
   const [prompt, setPrompt] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [generatedImageUrl, setGeneratedImageUrl] = useState(null);
   const [jobId, setJobId] = useState(null);
   const [showTermsInfo, setShowTermsInfo] = useState(false);
+  const imageRef = useRef(null);
 
   const suggestedStyles = [
     { name: 'Abstract Minimalism', content: 'Abstract minimalist modern', image: '/images/gallery/minimalist.jpg' },
@@ -65,6 +66,11 @@ const DalleIntegration = ({ onImageGenerated, initialPrompt }) => {
       const data = await response.json();
       console.log('Image generation started:', data);
       setJobId(data.jobId);
+
+      // Scroll to the image generation area
+      if (imageRef.current) {
+        imageRef.current.scrollIntoView({ behavior: 'smooth' });
+      }
     } catch (error) {
       console.error('Error starting image generation:', error);
       setError('Failed to start image generation. Please try again.');
@@ -113,6 +119,7 @@ const DalleIntegration = ({ onImageGenerated, initialPrompt }) => {
 
   const handleConfirmImage = () => {
     onImageGenerated(generatedImageUrl);
+    onImageConfirmed();
   };
 
   const handleStyleSelect = (selectedStyle) => {
@@ -128,35 +135,36 @@ const DalleIntegration = ({ onImageGenerated, initialPrompt }) => {
     <div className="max-w-2xl mx-auto p-4 sm:p-6 bg-gray-900 rounded-lg shadow-xl">
       <h2 className="text-2xl font-bold text-white mb-4">Step 1: Create your artwork</h2>
      
+      <div ref={imageRef}>
+        {(isLoading || generatedImageUrl) && (
+          <div className="mb-6 relative aspect-square">
+            {isLoading ? (
+              <div className="absolute inset-0 flex items-center justify-center bg-gray-800 rounded-lg">
+                <RefreshCw className="w-12 h-12 animate-spin text-purple-500" />
+              </div>
+            ) : (
+              <img src={generatedImageUrl} alt="Generated artwork" className="w-full h-full object-cover rounded-lg shadow-lg" />
+            )}
+          </div>
+        )}
 
-      {(isLoading || generatedImageUrl) && (
-        <div className="mb-6 relative aspect-square">
-          {isLoading ? (
-            <div className="absolute inset-0 flex items-center justify-center bg-gray-800 rounded-lg">
-              <RefreshCw className="w-12 h-12 animate-spin text-purple-500" />
-            </div>
-          ) : (
-            <img src={generatedImageUrl} alt="Generated artwork" className="w-full h-full object-cover rounded-lg shadow-lg" />
-          )}
-        </div>
-      )}
-
-      {generatedImageUrl && (
-        <div className="mb-6 flex flex-col sm:flex-row justify-between gap-2 sm:gap-4">
-          <button
-            onClick={handleRegenerateImage}
-            className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 flex items-center justify-center transition-colors duration-200 ease-in-out text-sm sm:text-base"
-          >
-            <RefreshCw className="w-4 h-4 sm:w-5 sm:h-5 mr-2" /> Regenerate
-          </button>
-          <button
-            onClick={handleConfirmImage}
-            className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 transition-colors duration-200 ease-in-out text-sm sm:text-base"
-          >
-            Confirm & Continue
-          </button>
-        </div>
-      )}
+        {generatedImageUrl && (
+          <div className="mb-6 flex flex-col sm:flex-row justify-between gap-2 sm:gap-4">
+            <button
+              onClick={handleRegenerateImage}
+              className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 flex items-center justify-center transition-colors duration-200 ease-in-out text-sm sm:text-base"
+            >
+              <RefreshCw className="w-4 h-4 sm:w-5 sm:h-5 mr-2" /> Regenerate
+            </button>
+            <button
+              onClick={handleConfirmImage}
+              className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 transition-colors duration-200 ease-in-out text-sm sm:text-base"
+            >
+              Confirm & Continue
+            </button>
+          </div>
+        )}
+      </div>
 
       <div className="mb-6">
         <h3 className="text-xl font-semibold text-white mb-2">Choose a Style</h3>

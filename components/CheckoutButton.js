@@ -5,6 +5,14 @@ import { loadStripe } from '@stripe/stripe-js';
 // Make sure to replace with your actual publishable key
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY);
 
+// Function to calculate shipping cost
+const calculateShipping = (price) => {
+  const shippingPercentage = 0.2; // 20%
+  const minimumShipping = 5;
+  const shippingCost = Math.max(price * shippingPercentage, minimumShipping);
+  return parseFloat(shippingCost.toFixed(2)); // Round to 2 decimal places
+};
+
 const CheckoutButton = ({ product, variant, imageUrl, originalImageUrl, isMockupGenerated, setFeedbackMessage }) => {
   const handleCheckout = async () => {
     if (!isMockupGenerated) {
@@ -17,6 +25,10 @@ const CheckoutButton = ({ product, variant, imageUrl, originalImageUrl, isMockup
     console.log('Variant:', variant);
     console.log('Image URL:', imageUrl);
     console.log('Original Image URL:', originalImageUrl);
+
+    // Calculate shipping cost
+    const shippingCost = calculateShipping(variant.price);
+    console.log('Shipping cost:', shippingCost);
 
     try {
       console.log('Loading Stripe...');
@@ -34,6 +46,7 @@ const CheckoutButton = ({ product, variant, imageUrl, originalImageUrl, isMockup
           variant: variant,
           imageUrl: imageUrl,
           originalImageUrl: originalImageUrl,
+          shippingCost: shippingCost,
         }),
       });
 

@@ -8,13 +8,14 @@ export default async function handler(req, res) {
 
   if (req.method === 'POST') {
     try {
-      const { product, variant, imageUrl, originalImageUrl } = req.body;
+      const { product, variant, imageUrl, originalImageUrl, shippingCost } = req.body;
       console.log('Received product:', product);
       console.log('Received variant:', variant);
       console.log('Received imageUrl:', imageUrl);
       console.log('Received originalImageUrl:', originalImageUrl);
+      console.log('Received shippingCost:', shippingCost);
 
-      if (!product || !variant || !imageUrl || !originalImageUrl) {
+      if (!product || !variant || !imageUrl || !originalImageUrl || shippingCost === undefined) {
         console.error('Missing required fields in request body');
         return res.status(400).json({ error: 'Missing required fields' });
       }
@@ -35,6 +36,16 @@ export default async function handler(req, res) {
             },
             quantity: 1,
           },
+          {
+            price_data: {
+              currency: 'usd',
+              product_data: {
+                name: 'Shipping',
+              },
+              unit_amount: Math.round(shippingCost * 100), // Convert to cents
+            },
+            quantity: 1,
+          },
         ],
         mode: 'payment',
         success_url: `${req.headers.origin}/success?session_id={CHECKOUT_SESSION_ID}`,
@@ -47,6 +58,7 @@ export default async function handler(req, res) {
           variantId: variant.id,
           mockupUrl: imageUrl, // This is the mockup image URL
           originalImageUrl: originalImageUrl, // This is the original AI-generated artwork URL
+          shippingCost: shippingCost.toFixed(2), // Store shipping cost in metadata
         },
       });
 
