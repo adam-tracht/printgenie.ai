@@ -1,6 +1,6 @@
 // components/DalleIntegration.js
 import React, { useState, useEffect } from 'react';
-import { Send, RefreshCw } from 'lucide-react';
+import { Send, RefreshCw, Info } from 'lucide-react';
 import ArtStyleSlider from './ArtStyleSlider';
 
 const DalleIntegration = ({ onImageGenerated, initialPrompt }) => {
@@ -9,6 +9,7 @@ const DalleIntegration = ({ onImageGenerated, initialPrompt }) => {
   const [error, setError] = useState(null);
   const [generatedImageUrl, setGeneratedImageUrl] = useState(null);
   const [jobId, setJobId] = useState(null);
+  const [showTermsInfo, setShowTermsInfo] = useState(false);
 
   const suggestedStyles = [
     { name: 'Abstract Minimalism', content: 'Abstract minimalist modern', image: '/images/gallery/minimalist.jpg' },
@@ -119,10 +120,15 @@ const DalleIntegration = ({ onImageGenerated, initialPrompt }) => {
     generateImage(selectedStyle.content);
   };
 
+  const toggleTermsInfo = () => {
+    setShowTermsInfo(!showTermsInfo);
+  };
+
   return (
     <div className="max-w-2xl mx-auto p-4 sm:p-6 bg-gray-900 rounded-lg shadow-xl">
       <h2 className="text-2xl font-bold text-white mb-4">Step 1: Create your artwork</h2>
-      
+     
+
       {(isLoading || generatedImageUrl) && (
         <div className="mb-6 relative aspect-square">
           {isLoading ? (
@@ -187,7 +193,34 @@ const DalleIntegration = ({ onImageGenerated, initialPrompt }) => {
           </div>
         </form>
       </div>
-
+ 
+      {/* Terms of Use Information */}
+      <div className="mb-6 bg-gray-800 rounded-lg p-4">
+        <button
+          onClick={toggleTermsInfo}
+          className="flex items-center text-purple-400 hover:text-purple-300 transition-colors duration-200"
+        >
+          <Info className="w-5 h-5 mr-2" />
+          <span className="text-sm">Terms of Use & Acceptable Content</span>
+        </button>
+        {showTermsInfo && (
+          <div className="mt-4 text-sm text-gray-300">
+            <p className="mb-2">
+              Our image generation is bound by ethical guidelines and legal restrictions. Please ensure your prompts adhere to the following:
+            </p>
+            <ul className="list-disc list-inside mb-2">
+              <li>No explicit or adult content</li>
+              <li>No violence or gore</li>
+              <li>No hate speech or discrimination</li>
+              <li>No copyrighted characters or logos</li>
+              <li>No personal information or identifiable individuals</li>
+            </ul>
+            <p>
+              Prompts violating these guidelines may be rejected. We reserve the right to refuse service for any content we deem inappropriate.
+            </p>
+          </div>
+        )}
+      </div>
       {error && (
         <p className="text-red-500 mb-4">{error}</p>
       )}
