@@ -11,13 +11,13 @@ const DalleIntegration = ({ onImageGenerated, initialPrompt }) => {
   const [jobId, setJobId] = useState(null);
 
   const suggestedStyles = [
-    { name: 'Abstract Minimalism', content: 'Abstract minimalist wall art with clean lines, simple shapes, and a muted color palette', image: '/images/gallery/minimalist.jpg' },
-    { name: 'Bohemian Chic', content: 'Bohemian chic wall art featuring warm earthy tones, intricate patterns, and a mix of textures', image: '/images/gallery/bohemian.jpg' },
+    { name: 'Abstract Minimalism', content: 'Abstract minimalist modern', image: '/images/gallery/minimalist.jpg' },
     { name: 'Neo-Expressionism', content: 'Neo-expressionist wall art with bold brushstrokes, vivid colors, and emotional intensity', image: '/images/gallery/neo-expressionism.jpg' },
+    { name: 'Desert Minimalism', content: 'Minimalist desert landscape wall art with muted earth tones and occasional pops of vibrant color, featuring simple geometric shapes and clean lines', image: '/images/gallery/desert-minimalist.jpg' },
+    { name: 'Bohemian Chic', content: 'A Bohemian chic art piece featuring warm earthy tones, intricate patterns, and a mix of textures', image: '/images/gallery/bohemian.jpg' },
     { name: 'Digital Surrealism', content: 'Digital surrealist blending dreamlike elements with hyper-realistic details', image: '/images/gallery/digital-surrealism.jpg' },
     { name: 'Modern Pop Art', content: 'Modern pop art with bright colors, bold outlines, and contemporary cultural references', image: '/images/gallery/modern-pop-art.jpg' },
     { name: 'Organic Textures', content: 'Organic textures inspired by nature, with flowing forms and subtle gradients', image: '/images/gallery/organic-textures.jpg' },
-    { name: 'Desert Minimalism', content: 'Minimalist desert landscape wall art with muted earth tones and occasional pops of vibrant color, featuring simple geometric shapes and clean lines', image: '/images/gallery/desert-minimalist.jpg' },
     { name: 'Geometric Patterns', content: 'Wall art with intricate geometric patterns, precise lines, and a harmonious color scheme', image: '/images/gallery/geometric-patterns.jpg' }
   ];
 
@@ -121,7 +121,7 @@ const DalleIntegration = ({ onImageGenerated, initialPrompt }) => {
 
   return (
     <div className="max-w-2xl mx-auto p-4 sm:p-6 bg-gray-900 rounded-lg shadow-xl">
-      <h2 className="text-2xl font-bold text-white mb-4">Step 1: Create Your AI Artwork</h2>
+      <h2 className="text-2xl font-bold text-white mb-4">Step 1: Create your artwork</h2>
       
       {(isLoading || generatedImageUrl) && (
         <div className="mb-6 relative aspect-square">
@@ -153,7 +153,7 @@ const DalleIntegration = ({ onImageGenerated, initialPrompt }) => {
       )}
 
       <div className="mb-6">
-        <h3 className="text-xl font-semibold text-white mb-2">Select a Style</h3>
+        <h3 className="text-xl font-semibold text-white mb-2">Choose a Style</h3>
         <ArtStyleSlider
           styles={suggestedStyles}
           onStyleSelect={handleStyleSelect}
