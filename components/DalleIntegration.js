@@ -168,7 +168,8 @@ const DalleIntegration = ({ onImageGenerated, initialPrompt }) => {
       </div>
 
       <div className="mb-6">
-        <h3 className="text-xl font-semibold text-white mb-2">Or Write Your Own Prompt</h3>
+        <div className="text-xl font-semibold text-white mb-2 text-center">OR</div>
+        <h3 className="text-xl font-semibold text-white mb-2">Write Your Own Prompt</h3>
         <form onSubmit={handleSubmit}>
           <div className="flex">
             <input
