@@ -231,6 +231,16 @@ const ProductSelection = ({ image, originalImageUrl, onProductSelected, onVarian
     setCurrentPage(newPage);
   };
 
+  const handleBackToGrid = () => {
+    console.log('ProductSelection: Navigating back to product grid');
+    setShowGrid(true);
+    setLocalSelectedProduct(null);
+    setSelectedVariant(null);
+    setMockupUrl(null);
+    onProductSelected(null);
+    onVariantSelected(null);
+  };
+
   if (isLoading) {
     return <div className="text-white">Loading product options...</div>;
   }
@@ -260,6 +270,7 @@ const ProductSelection = ({ image, originalImageUrl, onProductSelected, onVarian
           generateMockup={generateMockup}
           mockupUrl={mockupUrl}
           isGeneratingMockup={isGeneratingMockup}
+          handleBackToGrid={handleBackToGrid} // Pass the new function to ProductDetails
           originalImageUrl={originalImageUrl}
           generatedImageUrl={image} // Pass the generated image URL to ProductDetails
         />
