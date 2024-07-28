@@ -1,5 +1,6 @@
 // components/MainAppFlow.js
-import React, { useState, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { useRouter } from 'next/router';
 import DalleIntegration from './DalleIntegration';
 import ProductSelection from './ProductSelection';
 import CheckoutButton from './CheckoutButton';
@@ -27,6 +28,24 @@ const MainAppFlow = () => {
 
   const step2Ref = useRef(null);
   const step3Ref = useRef(null);
+  const router = useRouter();
+
+  useEffect(() => {
+    // Check URL parameters and local storage when the component mounts
+    const { image } = router.query;
+    if (image) {
+      setGeneratedImage(decodeURIComponent(image));
+      setOriginalImageUrl(decodeURIComponent(image));
+      setIsImageConfirmed(true);
+    } else {
+      const storedImage = localStorage.getItem('generatedImage');
+      if (storedImage) {
+        setGeneratedImage(storedImage);
+        setOriginalImageUrl(storedImage);
+        setIsImageConfirmed(true);
+      }
+    }
+  }, [router.query]);
 
   const handleImageGenerated = (imageUrl) => {
     console.log('Image generated:', imageUrl);
@@ -36,6 +55,11 @@ const MainAppFlow = () => {
 
   const handleImageConfirmed = () => {
     setIsImageConfirmed(true);
+    // Update URL with the generated image
+    const encodedImageUrl = encodeURIComponent(generatedImage);
+    router.push(`/?image=${encodedImageUrl}`, undefined, { shallow: true });
+    // Store the image URL in local storage
+    localStorage.setItem('generatedImage', generatedImage);
     if (step2Ref.current) {
       step2Ref.current.scrollIntoView({ behavior: 'smooth' });
     }
@@ -69,6 +93,7 @@ const MainAppFlow = () => {
         <DalleIntegration 
           onImageGenerated={handleImageGenerated} 
           onImageConfirmed={handleImageConfirmed}
+          initialImage={generatedImage}
         />
       </section>
 

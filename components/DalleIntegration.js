@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Send, RefreshCw, Info } from 'lucide-react';
 import ArtStyleSlider from './ArtStyleSlider';
 
-const DalleIntegration = ({ onImageGenerated, onImageConfirmed, initialPrompt }) => {
+const DalleIntegration = ({ onImageGenerated, onImageConfirmed, initialImage }) => {
   const [prompt, setPrompt] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -24,11 +24,10 @@ const DalleIntegration = ({ onImageGenerated, onImageConfirmed, initialPrompt })
   ];
 
   useEffect(() => {
-    if (initialPrompt) {
-      setPrompt(initialPrompt);
-      generateImage(initialPrompt);
+    if (initialImage) {
+      setGeneratedImageUrl(initialImage);
     }
-  }, [initialPrompt]);
+  }, [initialImage]);
 
   useEffect(() => {
     let intervalId;
@@ -99,6 +98,7 @@ const DalleIntegration = ({ onImageGenerated, onImageConfirmed, initialPrompt })
         setGeneratedImageUrl(data.imageUrl);
         setIsLoading(false);
         setJobId(null);
+        onImageGenerated(data.imageUrl);
       } else if (data.status === 'failed') {
         setError('Image generation failed. Please try again.');
         setIsLoading(false);

@@ -79,7 +79,7 @@ const SuccessPage = () => {
       <div className="bg-gray-800 p-8 rounded-lg shadow-xl max-w-md w-full">
         <h1 className="text-3xl font-bold text-green-500 mb-4">Order Successful!</h1>
         <p className="text-white mb-4">
-          Thank you for your purchase! We're excited to create your custom AI-generated artwork.
+          Thank you for your purchase! We&apos;re excited to create your custom AI-generated artwork.
         </p>
         {emailSent ? (
           <p className="text-white mb-4">
@@ -87,7 +87,7 @@ const SuccessPage = () => {
           </p>
         ) : (
           <p className="text-yellow-400 mb-4">
-            We encountered an issue sending your confirmation email. Don't worry, your order has been processed successfully. Please contact our support team if you need any information about your order.
+            We encountered an issue sending your confirmation email. Don&apos;t worry, your order has been processed successfully. Please contact our support team if you need any information about your order.
           </p>
         )}
         {orderDetails && (
