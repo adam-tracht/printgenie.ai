@@ -29,8 +29,9 @@ export default async function handler(req, res) {
             price_data: {
               currency: 'usd',
               product_data: {
-                name: `${product.name} - ${variant.name}`,
+                name: `${variant.name}`,
                 images: [imageUrl], // This is the mockup image
+                tax_code: 'txcd_35010000', // Fine art tax code
               },
               unit_amount: Math.round(variant.price * 100), // Convert to cents
             },
@@ -41,6 +42,7 @@ export default async function handler(req, res) {
               currency: 'usd',
               product_data: {
                 name: 'Shipping',
+                tax_code: 'txcd_92010001', // Shipping tax code
               },
               unit_amount: Math.round(shippingCost * 100), // Convert to cents
             },
@@ -50,6 +52,9 @@ export default async function handler(req, res) {
         mode: 'payment',
         success_url: `${req.headers.origin}/success?session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: `${req.headers.origin}/`,
+        automatic_tax: {
+          enabled: true,
+        },
         shipping_address_collection: {
           allowed_countries: ['US', 'CA'], // Add more countries as needed
         },

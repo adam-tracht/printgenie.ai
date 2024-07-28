@@ -23,7 +23,7 @@ export default async function handler(req, res) {
       // Retrieve the session from Stripe
       console.log('Retrieving Stripe session...');
       const session = await stripe.checkout.sessions.retrieve(session_id, {
-        expand: ['customer', 'line_items']
+        expand: ['customer', 'line_items', 'total_details']
       });
       console.log('Stripe session retrieved:', session);
 
@@ -38,10 +38,12 @@ export default async function handler(req, res) {
       // Calculate the total from the Stripe session
       const total = session.amount_total / 100; // Convert from cents to dollars
 
-      // Add the total and customer email to the order details
-      const orderWithTotal = {
+      // Add the total, subtotal, tax, and customer email to the order details
+      const orderWithDetails = {
         ...printfulOrder,
         total: total,
+        subtotal: session.amount_subtotal / 100,
+        tax: session.total_details.amount_tax / 100,
         recipient: {
           ...printfulOrder.recipient,
           email: session.customer_details.email,
@@ -51,7 +53,7 @@ export default async function handler(req, res) {
       // Send order confirmation email
       let emailSent = false;
       try {
-        await sendOrderConfirmationEmail(orderWithTotal, mockupUrl);
+        await sendOrderConfirmationEmail(orderWithDetails, mockupUrl);
         console.log('Order confirmation email sent successfully');
         emailSent = true;
       } catch (emailError) {
@@ -60,7 +62,7 @@ export default async function handler(req, res) {
       }
 
       res.status(200).json({ 
-        order: orderWithTotal, 
+        order: orderWithDetails, 
         mockupUrl,
         emailSent // Include this in the response so the client knows if the email was sent
       });
