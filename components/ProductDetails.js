@@ -12,7 +12,7 @@ const ProductDetails = ({
   generateMockup, 
   mockupUrl, 
   isGeneratingMockup, 
-  handleBackToGrid, // New prop for handling back to grid action
+  handleBackToGrid,
   originalImageUrl,
   generatedImageUrl
 }) => {
@@ -170,14 +170,14 @@ const ProductDetails = ({
             {isGeneratingMockup ? 'Generating...' : isMockupGenerated ? 'Mockup Generated' : 'Generate Mockup'}
           </button>
           {feedbackMessage && <p className="text-yellow-500 text-sm mt-2">{feedbackMessage}</p>}
-          <CheckoutButton
+          <CheckoutButton 
             product={{
               id: product.id,
-              name: product.title,
+              name: `${product.title} - ${localSelectedVariant ? localSelectedVariant.name : ''}`,
             }}
             variant={localSelectedVariant && {
               id: localSelectedVariant.id,
-              name: `${localSelectedVariant.color} - ${localSelectedVariant.size}`,
+              name: localSelectedVariant.name,
               price: localSelectedVariant.sellingPrice
             }}
             imageUrl={mockupUrl}

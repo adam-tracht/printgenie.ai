@@ -34,35 +34,81 @@ const MainAppFlow = () => {
     // Check URL parameters and local storage when the component mounts
     const { image } = router.query;
     if (image) {
-      setGeneratedImage(decodeURIComponent(image));
-      setOriginalImageUrl(decodeURIComponent(image));
-      setIsImageConfirmed(true);
+      const decodedImage = decodeURIComponent(image);
+      if (isValidImageUrl(decodedImage)) {
+        setGeneratedImage(decodedImage);
+        setOriginalImageUrl(decodedImage);
+        setIsImageConfirmed(true);
+      } else {
+        console.error('Invalid image URL in query parameter');
+        clearImageState();
+      }
     } else {
       const storedImage = localStorage.getItem('generatedImage');
-      if (storedImage) {
+      if (storedImage && isValidImageUrl(storedImage)) {
         setGeneratedImage(storedImage);
         setOriginalImageUrl(storedImage);
         setIsImageConfirmed(true);
+      } else if (storedImage) {
+        console.error('Invalid image URL in local storage');
+        localStorage.removeItem('generatedImage');
       }
     }
   }, [router.query]);
 
+  const isValidImageUrl = (url) => {
+    try {
+      new URL(url);
+      return url.startsWith('http://') || url.startsWith('https://');
+    } catch {
+      return false;
+    }
+  };
+
+  const clearImageState = () => {
+    setGeneratedImage(null);
+    setOriginalImageUrl(null);
+    setIsImageConfirmed(false);
+    localStorage.removeItem('generatedImage');
+    // Reset product selection and mockup
+    setSelectedProduct(null);
+    setSelectedVariant(null);
+    setMockupImage(null);
+    // Update URL to remove the image parameter
+    router.push('/', undefined, { shallow: true });
+  };
+
   const handleImageGenerated = (imageUrl) => {
     console.log('Image generated:', imageUrl);
-    setGeneratedImage(imageUrl);
-    setOriginalImageUrl(imageUrl);
+    if (isValidImageUrl(imageUrl)) {
+      setGeneratedImage(imageUrl);
+      setOriginalImageUrl(imageUrl);
+      // Reset product selection and mockup when a new image is generated
+      setSelectedProduct(null);
+      setSelectedVariant(null);
+      setMockupImage(null);
+    } else {
+      console.error('Invalid image URL generated');
+      clearImageState();
+    }
   };
 
   const handleImageConfirmed = () => {
     setIsImageConfirmed(true);
     // Update URL with the generated image
-    const encodedImageUrl = encodeURIComponent(generatedImage);
-    router.push(`/?image=${encodedImageUrl}`, undefined, { shallow: true });
-    // Store the image URL in local storage
-    localStorage.setItem('generatedImage', generatedImage);
+    if (generatedImage && isValidImageUrl(generatedImage)) {
+      const encodedImageUrl = encodeURIComponent(generatedImage);
+      router.push(`/?image=${encodedImageUrl}`, undefined, { shallow: true });
+      // Store the image URL in local storage
+      localStorage.setItem('generatedImage', generatedImage);
+    }
     if (step2Ref.current) {
       step2Ref.current.scrollIntoView({ behavior: 'smooth' });
     }
+  };
+
+  const handleImageReset = () => {
+    clearImageState();
   };
 
   const handleProductSelected = (product) => {
@@ -94,6 +140,7 @@ const MainAppFlow = () => {
           onImageGenerated={handleImageGenerated} 
           onImageConfirmed={handleImageConfirmed}
           initialImage={generatedImage}
+          onImageReset={handleImageReset}
         />
       </section>
 

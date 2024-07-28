@@ -26,8 +26,6 @@ const ProductGrid = ({
 
   return (
     <div>
-
-      
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {displayedItems.map((item) => (
           <div key={item.id} className="bg-gray-900 rounded-lg p-4 shadow-lg transition-transform hover:scale-105">

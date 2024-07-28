@@ -1,9 +1,18 @@
-//components/ProductSelection.js
+// components/ProductSelection.js
 import React, { useState, useEffect } from 'react';
 import ProductGrid from './ProductGrid';
 import ProductDetails from './ProductDetails';
 
-const ProductSelection = ({ image, originalImageUrl, onProductSelected, onVariantSelected, selectedProduct, onMockupGenerated, isGeneratingMockup, setIsGeneratingMockup }) => {
+const ProductSelection = ({ 
+  image, 
+  originalImageUrl, 
+  onProductSelected, 
+  onVariantSelected, 
+  selectedProduct, 
+  onMockupGenerated, 
+  isGeneratingMockup, 
+  setIsGeneratingMockup 
+}) => {
   const [catalogItems, setCatalogItems] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -25,56 +34,19 @@ const ProductSelection = ({ image, originalImageUrl, onProductSelected, onVarian
   ];
 
   useEffect(() => {
-    const fetchCatalogItems = async () => {
-      setIsLoading(true);
-      setError(null);
-      try {
-        console.log('ProductSelection: Fetching catalog items');
-        const response = await fetch('/api/printful', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ action: 'getCatalogItems' }),
-        });
-
-        if (!response.ok) {
-          throw new Error('Failed to fetch catalog items');
-        }
-
-        const data = await response.json();
-        console.log('ProductSelection: Received catalog items:', data.result.length);
-
-        const filteredProducts = data.result.filter(item => 
-          !item.is_discontinued && allowedCategories.includes(item.type_name)
-        );
-        
-        // Sort products based on the order of allowedCategories
-        const sortedProducts = filteredProducts.sort((a, b) => {
-          return allowedCategories.indexOf(a.type_name) - allowedCategories.indexOf(b.type_name);
-        });
-
-        const categorizedProducts = sortedProducts.map(product => ({
-          ...product,
-          category: product.type_name,
-        }));
-        
-        if (categorizedProducts.length === 0) {
-          throw new Error('No active products found in the specified categories.');
-        }
-        
-        console.log('ProductSelection: Filtered and sorted products:', categorizedProducts.length);
-        setCatalogItems(categorizedProducts);
-      } catch (error) {
-        console.error('ProductSelection: Error fetching catalog items:', error);
-        setError(error.message || 'Failed to load catalog items. Please try again.');
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
     fetchCatalogItems();
   }, []);
+
+  useEffect(() => {
+    // Reset local state when a new image is generated
+    if (image) {
+      setLocalSelectedProduct(null);
+      setSelectedVariant(null);
+      setMockupUrl(null);
+      setShowGrid(true);
+      setCurrentPage(1);
+    }
+  }, [image]);
 
   useEffect(() => {
     console.log('ProductSelection: selectedProduct updated:', selectedProduct);
@@ -93,6 +65,54 @@ const ProductSelection = ({ image, originalImageUrl, onProductSelected, onVarian
       setShowGrid(true);
     }
   }, [selectedProduct]);
+
+  const fetchCatalogItems = async () => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      console.log('ProductSelection: Fetching catalog items');
+      const response = await fetch('/api/printful', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ action: 'getCatalogItems' }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch catalog items');
+      }
+
+      const data = await response.json();
+      console.log('ProductSelection: Received catalog items:', data.result.length);
+
+      const filteredProducts = data.result.filter(item => 
+        !item.is_discontinued && allowedCategories.includes(item.type_name)
+      );
+      
+      // Sort products based on the order of allowedCategories
+      const sortedProducts = filteredProducts.sort((a, b) => {
+        return allowedCategories.indexOf(a.type_name) - allowedCategories.indexOf(b.type_name);
+      });
+
+      const categorizedProducts = sortedProducts.map(product => ({
+        ...product,
+        category: product.type_name,
+      }));
+      
+      if (categorizedProducts.length === 0) {
+        throw new Error('No active products found in the specified categories.');
+      }
+      
+      console.log('ProductSelection: Filtered and sorted products:', categorizedProducts.length);
+      setCatalogItems(categorizedProducts);
+    } catch (error) {
+      console.error('ProductSelection: Error fetching catalog items:', error);
+      setError(error.message || 'Failed to load catalog items. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const fetchProductVariants = async (productId) => {
     setIsLoading(true);
@@ -260,7 +280,7 @@ const ProductSelection = ({ image, originalImageUrl, onProductSelected, onVarian
           currentPage={currentPage}
           itemsPerPage={itemsPerPage}
           onPageChange={handlePageChange}
-          generatedImageUrl={image} // Pass the generated image URL to ProductGrid
+          generatedImageUrl={image}
         />
       ) : (
         <ProductDetails
@@ -270,9 +290,9 @@ const ProductSelection = ({ image, originalImageUrl, onProductSelected, onVarian
           generateMockup={generateMockup}
           mockupUrl={mockupUrl}
           isGeneratingMockup={isGeneratingMockup}
-          handleBackToGrid={handleBackToGrid} // Pass the new function to ProductDetails
+          handleBackToGrid={handleBackToGrid}
           originalImageUrl={originalImageUrl}
-          generatedImageUrl={image} // Pass the generated image URL to ProductDetails
+          generatedImageUrl={image}
         />
       )}
     </div>

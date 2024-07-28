@@ -24,8 +24,11 @@ export default async function handler(req, res) {
     const newJobId = uuidv4();
     jobStatus.set(newJobId, { status: 'processing' });
 
+    // Add instructions to the prompt
+    const modifiedPrompt = `Please generate the image as described. Do not include the term "wall art" in any context or expand with verbose descriptions. ${prompt}`;
+
     // Start the image generation process asynchronously
-    generateImage(newJobId, prompt);
+    generateImage(newJobId, modifiedPrompt);
 
     // Immediately return the job ID to the client
     res.status(202).json({ jobId: newJobId, message: 'Image generation started' });

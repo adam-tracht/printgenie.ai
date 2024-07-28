@@ -22,7 +22,7 @@ const HomePage = () => {
         <meta name="description" content="Create unique, AI-generated artwork and order custom prints with CanvasGenie.ai. Transform your ideas into stunning visual art pieces." />
         <meta name="keywords" content="AI art, custom prints, AI-generated artwork, digital art creation, personalized artwork" />
         <meta property="og:title" content="CanvasGenie.ai | AI-Generated Artwork and Custom Prints" />
-        <meta property="og:description" content="Transform your ideas into stunning visual art with CanvasGenie.ai&apos;s AI-powered custom art creation platform." />
+        <meta property="og:description" content="Transform your ideas into stunning visual art with CanvasGenie.ai's AI-powered custom art creation platform." />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://canvasgenie.ai" />
         <meta property="og:image" content="https://canvasgenie.ai/images/og-image.jpg" />
@@ -54,7 +54,7 @@ const HomePage = () => {
                 At CanvasGenie.ai, we believe that everyone has a unique artistic vision waiting to be brought to life. Our mission is to democratize art creation by combining cutting-edge AI technology with high-quality print-on-demand services.
               </p>
               <p className="text-sm md:text-base text-gray-300">
-                We&apos;re making it possible for anyone, regardless of artistic background, to transform their ideas into stunning, tangible artwork. With CanvasGenie.ai, the only limit is your imagination.
+                We're making it possible for anyone, regardless of artistic background, to transform their ideas into stunning, tangible artwork. With CanvasGenie.ai, the only limit is your imagination.
               </p>
             </div>
           </section>
@@ -93,7 +93,7 @@ const HomePage = () => {
           <section className="text-center">
             <h3 className="text-2xl md:text-3xl font-bold text-purple-400 mb-4 md:mb-6">Join the AI Art Revolution with CanvasGenie.ai</h3>
             <p className="text-sm md:text-base text-gray-300 mb-6 md:mb-8">
-              Whether you&apos;re an art enthusiast, a creative professional, or someone who&apos;s always wanted to create but never knew where to start, CanvasGenie.ai is here to help you bring your imagination to life. Join us in exploring the endless possibilities of AI-powered art creation.
+              Whether you're an art enthusiast, a creative professional, or someone who's always wanted to create but never knew where to start, CanvasGenie.ai is here to help you bring your imagination to life. Join us in exploring the endless possibilities of AI-powered art creation.
             </p>
             <a href="#top" className="inline-flex items-center bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-2 md:px-8 md:py-3 rounded-lg hover:from-purple-600 hover:to-pink-600 transition-colors text-base md:text-lg font-semibold">
               Start Creating Your AI Art Now
