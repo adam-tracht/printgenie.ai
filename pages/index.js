@@ -54,7 +54,7 @@ const HomePage = () => {
                 At CanvasGenie.ai, we believe that everyone has a unique artistic vision waiting to be brought to life. Our mission is to democratize art creation by combining cutting-edge AI technology with high-quality print-on-demand services.
               </p>
               <p className="text-sm md:text-base text-gray-300">
-                We're making it possible for anyone, regardless of artistic background, to transform their ideas into stunning, tangible artwork. With CanvasGenie.ai, the only limit is your imagination.
+                We&apost;re making it possible for anyone, regardless of artistic background, to transform their ideas into stunning, tangible artwork. With CanvasGenie.ai, the only limit is your imagination.
               </p>
             </div>
           </section>
@@ -93,7 +93,7 @@ const HomePage = () => {
           <section className="text-center">
             <h3 className="text-2xl md:text-3xl font-bold text-purple-400 mb-4 md:mb-6">Join the AI Art Revolution with CanvasGenie.ai</h3>
             <p className="text-sm md:text-base text-gray-300 mb-6 md:mb-8">
-              Whether you're an art enthusiast, a creative professional, or someone who's always wanted to create but never knew where to start, CanvasGenie.ai is here to help you bring your imagination to life. Join us in exploring the endless possibilities of AI-powered art creation.
+              Whether you&apost;re an art enthusiast, a creative professional, or someone who&apost;s always wanted to create but never knew where to start, CanvasGenie.ai is here to help you bring your imagination to life. Join us in exploring the endless possibilities of AI-powered art creation.
             </p>
             <a href="#top" className="inline-flex items-center bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-2 md:px-8 md:py-3 rounded-lg hover:from-purple-600 hover:to-pink-600 transition-colors text-base md:text-lg font-semibold">
               Start Creating Your AI Art Now
