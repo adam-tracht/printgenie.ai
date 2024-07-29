@@ -87,6 +87,7 @@ const MainAppFlow = () => {
       setSelectedProduct(null);
       setSelectedVariant(null);
       setMockupImage(null);
+      setIsImageConfirmed(false); // Reset the confirmation state
     } else {
       console.error('Invalid image URL generated');
       clearImageState();
