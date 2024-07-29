@@ -1,4 +1,4 @@
-//components/ProductVariantSelector.js
+// components/ProductVariantSelector.js
 import React, { useState, useEffect } from 'react';
 import { Loader2 } from 'lucide-react';
 import VariantSelector from './VariantSelector';
@@ -8,6 +8,12 @@ const calculateSellingPrice = (basePrice) => {
   const priceWithMargin = basePrice * 1.2; // Add 20% profit margin
   const roundedPrice = Math.floor(priceWithMargin) + 0.95; // Round down to nearest whole number and add 0.95
   return parseFloat(roundedPrice.toFixed(2)); // Ensure we return a number with 2 decimal places
+};
+
+// Function to check if a size is square
+const isSquareSize = (size) => {
+  const [width, height] = size.split('×').map(dim => parseInt(dim));
+  return width === height;
 };
 
 const ProductVariantSelector = ({ 
@@ -51,13 +57,13 @@ const ProductVariantSelector = ({
         if (!colorVariants.has(color)) {
           colorVariants.set(color, variant);
         }
-        if (variant.size) {
+        if (variant.size && isSquareSize(variant.size)) {
           sizes.add(variant.size);
         }
       });
     }
     console.log('ProductVariantSelector: Unique colors', Array.from(colorVariants.keys()));
-    console.log('ProductVariantSelector: Unique sizes', Array.from(sizes));
+    console.log('ProductVariantSelector: Unique square sizes', Array.from(sizes));
     return { 
       colorVariants: Array.from(colorVariants.values()),
       sizes: sortSizes(Array.from(sizes))
@@ -65,16 +71,10 @@ const ProductVariantSelector = ({
   };
 
   const sortSizes = (sizes) => {
-    const sizeOrder = ['XS', 'S', 'M', 'L', 'XL', '2XL', '3XL', '4XL', '5XL'];
     return sizes.sort((a, b) => {
-      const aIndex = sizeOrder.indexOf(a);
-      const bIndex = sizeOrder.indexOf(b);
-      if (aIndex !== -1 && bIndex !== -1) {
-        return aIndex - bIndex;
-      }
-      if (aIndex !== -1) return -1;
-      if (bIndex !== -1) return 1;
-      return a.localeCompare(b);
+      const aSize = parseInt(a.split('×')[0]);
+      const bSize = parseInt(b.split('×')[0]);
+      return aSize - bSize;
     });
   };
 
