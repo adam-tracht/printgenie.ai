@@ -8,14 +8,13 @@ export default async function handler(req, res) {
 
   if (req.method === 'POST') {
     try {
-      const { product, variant, imageUrl, originalImageUrl, shippingCost } = req.body;
+      const { product, variant, imageUrl, shippingCost } = req.body;
       console.log('Received product:', product);
       console.log('Received variant:', variant);
       console.log('Received imageUrl:', imageUrl);
-      console.log('Received originalImageUrl:', originalImageUrl);
       console.log('Received shippingCost:', shippingCost);
 
-      if (!product || !variant || !imageUrl || !originalImageUrl || shippingCost === undefined) {
+      if (!product || !variant || !imageUrl || shippingCost === undefined) {
         console.error('Missing required fields in request body');
         return res.status(400).json({ error: 'Missing required fields' });
       }
@@ -62,7 +61,6 @@ export default async function handler(req, res) {
           productId: product.id,
           variantId: variant.id,
           mockupUrl: imageUrl, // This is the mockup image URL
-          originalImageUrl: originalImageUrl, // This is the original AI-generated artwork URL
           shippingCost: shippingCost.toFixed(2), // Store shipping cost in metadata
         },
       });

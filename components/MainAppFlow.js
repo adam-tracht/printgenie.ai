@@ -18,7 +18,7 @@ const Hero = () => (
 
 const MainAppFlow = () => {
   const [generatedImage, setGeneratedImage] = useState(null);
-  const [originalImageUrl, setOriginalImageUrl] = useState(null);
+  const [generatedImageId, setGeneratedImageId] = useState(null);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [selectedVariant, setSelectedVariant] = useState(null);
   const [mockupImage, setMockupImage] = useState(null);
@@ -31,78 +31,55 @@ const MainAppFlow = () => {
   const router = useRouter();
 
   useEffect(() => {
-    // Check URL parameters and local storage when the component mounts
-    const { image } = router.query;
-    if (image) {
-      const decodedImage = decodeURIComponent(image);
-      if (isValidImageUrl(decodedImage)) {
-        setGeneratedImage(decodedImage);
-        setOriginalImageUrl(decodedImage);
-        setIsImageConfirmed(true);
-      } else {
-        console.error('Invalid image URL in query parameter');
-        clearImageState();
-      }
-    } else {
-      const storedImage = localStorage.getItem('generatedImage');
-      if (storedImage && isValidImageUrl(storedImage)) {
-        setGeneratedImage(storedImage);
-        setOriginalImageUrl(storedImage);
-        setIsImageConfirmed(true);
-      } else if (storedImage) {
-        console.error('Invalid image URL in local storage');
-        localStorage.removeItem('generatedImage');
-      }
+    const { imageId } = router.query;
+    if (imageId) {
+      fetchImage(imageId);
     }
   }, [router.query]);
 
-  const isValidImageUrl = (url) => {
+  const fetchImage = async (imageId) => {
     try {
-      new URL(url);
-      return url.startsWith('http://') || url.startsWith('https://');
-    } catch {
-      return false;
+      const response = await fetch(`/api/images/${imageId}`);
+      if (!response.ok) {
+        throw new Error('Failed to fetch image');
+      }
+      const data = await response.json();
+      if (data.success && data.data) {
+        setGeneratedImage(data.data.url);
+        setGeneratedImageId(data.data._id);
+        setIsImageConfirmed(true);
+      } else {
+        throw new Error('Invalid image data');
+      }
+    } catch (error) {
+      console.error('Error fetching image:', error);
+      clearImageState();
     }
   };
 
   const clearImageState = () => {
     setGeneratedImage(null);
-    setOriginalImageUrl(null);
+    setGeneratedImageId(null);
     setIsImageConfirmed(false);
-    localStorage.removeItem('generatedImage');
-    // Reset product selection and mockup
     setSelectedProduct(null);
     setSelectedVariant(null);
     setMockupImage(null);
-    // Update URL to remove the image parameter
     router.push('/', undefined, { shallow: true });
   };
 
-  const handleImageGenerated = (imageUrl) => {
-    console.log('Image generated:', imageUrl);
-    if (isValidImageUrl(imageUrl)) {
-      setGeneratedImage(imageUrl);
-      setOriginalImageUrl(imageUrl);
-      // Reset product selection and mockup when a new image is generated
-      setSelectedProduct(null);
-      setSelectedVariant(null);
-      setMockupImage(null);
-      setIsImageConfirmed(false); // Reset the confirmation state
-    } else {
-      console.error('Invalid image URL generated');
-      clearImageState();
-    }
+  const handleImageGenerated = (imageUrl, imageId) => {
+    console.log('Image generated:', imageUrl, imageId);
+    setGeneratedImage(imageUrl);
+    setGeneratedImageId(imageId);
+    setSelectedProduct(null);
+    setSelectedVariant(null);
+    setMockupImage(null);
+    setIsImageConfirmed(false);
   };
 
-  const handleImageConfirmed = () => {
+  const handleImageConfirmed = (imageId) => {
     setIsImageConfirmed(true);
-    // Update URL with the generated image
-    if (generatedImage && isValidImageUrl(generatedImage)) {
-      const encodedImageUrl = encodeURIComponent(generatedImage);
-      router.push(`/?image=${encodedImageUrl}`, undefined, { shallow: true });
-      // Store the image URL in local storage
-      localStorage.setItem('generatedImage', generatedImage);
-    }
+    router.push(`/?imageId=${imageId}`, undefined, { shallow: true });
     if (step2Ref.current) {
       step2Ref.current.scrollIntoView({ behavior: 'smooth' });
     }
@@ -131,6 +108,16 @@ const MainAppFlow = () => {
     }
   };
 
+  // Helper function to format price
+  const formatPrice = (price) => {
+    if (typeof price === 'number') {
+      return price.toFixed(2);
+    } else if (typeof price === 'string') {
+      return parseFloat(price).toFixed(2);
+    }
+    return 'N/A';
+  };
+
   return (
     <div className="max-w-6xl mx-auto p-6 bg-gray-800 rounded-lg shadow-xl">
       <Hero />
@@ -152,7 +139,7 @@ const MainAppFlow = () => {
         )}
         <ProductSelection 
           image={generatedImage}
-          originalImageUrl={originalImageUrl}
+          imageId={generatedImageId}
           onProductSelected={handleProductSelected}
           onVariantSelected={handleVariantSelected}
           selectedProduct={selectedProduct}
@@ -160,6 +147,7 @@ const MainAppFlow = () => {
           isGeneratingMockup={isGeneratingMockup}
           setIsGeneratingMockup={setIsGeneratingMockup}
           hideHeaders={true}
+          isEnabled={isImageConfirmed}
         />
       </section>
 
@@ -180,7 +168,7 @@ const MainAppFlow = () => {
             )}
             <p className="text-lg text-gray-300 mb-4">Product: {selectedProduct.title}</p>
             <p className="text-lg text-gray-300 mb-4">Variant: {selectedVariant.name}</p>
-            <p className="text-xl text-white mb-6">Price: ${selectedVariant.price}</p>
+            <p className="text-xl text-white mb-6">Price: ${formatPrice(selectedVariant.sellingPrice)}</p>
             {feedbackMessage && <p className="text-yellow-500 mb-4">{feedbackMessage}</p>}
             <CheckoutButton 
               product={{
@@ -190,10 +178,9 @@ const MainAppFlow = () => {
               variant={{
                 id: selectedVariant.id,
                 name: selectedVariant.name,
-                price: selectedVariant.price
+                price: selectedVariant.sellingPrice
               }}
               imageUrl={mockupImage}
-              originalImageUrl={originalImageUrl}
               isMockupGenerated={!!mockupImage}
               setFeedbackMessage={setFeedbackMessage}
             />

@@ -9,7 +9,8 @@ const ProductGrid = ({
   itemsPerPage, 
   onPageChange,
   isLoading,
-  generatedImageUrl
+  generatedImageUrl,
+  isDisabled
 }) => {
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
@@ -26,7 +27,7 @@ const ProductGrid = ({
 
   return (
     <div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 ${isDisabled ? 'opacity-50 pointer-events-none' : ''}`}>
         {displayedItems.map((item) => (
           <div key={item.id} className="bg-gray-900 rounded-lg p-4 shadow-lg transition-transform hover:scale-105">
             <div className="aspect-w-1 aspect-h-1 mb-4">
@@ -43,6 +44,7 @@ const ProductGrid = ({
             <button
               onClick={() => onProductSelect(item)}
               className="w-full bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors"
+              disabled={isDisabled}
             >
               Select
             </button>

@@ -1,6 +1,8 @@
 // pages/api/generate-image.js
 import OpenAI from "openai";
 import { v4 as uuidv4 } from 'uuid';
+import dbConnect from '../../utils/database';
+import Image from '../../models/Image';
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -61,7 +63,28 @@ async function generateImage(jobId, prompt) {
     console.log('OpenAI API response:', response);
     const imageUrl = response.data[0].url;
     console.log(`Image generated successfully for job ${jobId}. URL: ${imageUrl}`);
-    jobStatus.set(jobId, { status: 'completed', imageUrl });
+
+    let imageId = null;
+
+    try {
+      // Connect to the database
+      await dbConnect();
+
+      // Save the image URL and prompt to the database
+      const newImage = new Image({
+        url: imageUrl,
+        prompt: prompt,
+      });
+      const savedImage = await newImage.save();
+      imageId = savedImage._id;
+
+      console.log(`Image saved to database with ID: ${imageId}`);
+    } catch (dbError) {
+      console.error('Error saving image to database:', dbError);
+      // Continue with the process even if database save fails
+    }
+
+    jobStatus.set(jobId, { status: 'completed', imageUrl, imageId });
   } catch (error) {
     console.error(`Error generating image for job ${jobId}:`, error);
     jobStatus.set(jobId, { status: 'failed', error: error.message });

@@ -8,8 +8,10 @@ const DalleIntegration = ({ onImageGenerated, onImageConfirmed, initialImage, on
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [generatedImageUrl, setGeneratedImageUrl] = useState(null);
+  const [generatedImageId, setGeneratedImageId] = useState(null);
   const [jobId, setJobId] = useState(null);
   const [showTermsInfo, setShowTermsInfo] = useState(false);
+  const [isImageConfirmed, setIsImageConfirmed] = useState(false);
   const imageRef = useRef(null);
 
   const suggestedStyles = [
@@ -46,6 +48,8 @@ const DalleIntegration = ({ onImageGenerated, onImageConfirmed, initialImage, on
     setIsLoading(true);
     setError(null);
     setGeneratedImageUrl(null);
+    setGeneratedImageId(null);
+    setIsImageConfirmed(false);
     
     try {
       console.log('Generating image with prompt:', currentPrompt);
@@ -96,9 +100,10 @@ const DalleIntegration = ({ onImageGenerated, onImageConfirmed, initialImage, on
 
       if (data.status === 'completed') {
         setGeneratedImageUrl(data.imageUrl);
+        setGeneratedImageId(data.imageId);
         setIsLoading(false);
         setJobId(null);
-        onImageGenerated(data.imageUrl);
+        onImageGenerated(data.imageUrl, data.imageId);
       } else if (data.status === 'failed') {
         setError('Image generation failed. Please try again.');
         setIsLoading(false);
@@ -118,8 +123,9 @@ const DalleIntegration = ({ onImageGenerated, onImageConfirmed, initialImage, on
   };
 
   const handleConfirmImage = () => {
-    onImageGenerated(generatedImageUrl);
-    onImageConfirmed();
+    setIsImageConfirmed(true);
+    onImageGenerated(generatedImageUrl, generatedImageId);
+    onImageConfirmed(generatedImageId);
   };
 
   const handleStyleSelect = (selectedStyle) => {
@@ -133,7 +139,9 @@ const DalleIntegration = ({ onImageGenerated, onImageConfirmed, initialImage, on
 
   const handleResetImage = () => {
     setGeneratedImageUrl(null);
+    setGeneratedImageId(null);
     setPrompt('');
+    setIsImageConfirmed(false);
     onImageReset();
   };
 
@@ -163,7 +171,7 @@ const DalleIntegration = ({ onImageGenerated, onImageConfirmed, initialImage, on
           </div>
         )}
 
-        {generatedImageUrl && (
+        {generatedImageUrl && !isImageConfirmed && (
           <div className="mb-6 flex flex-col sm:flex-row justify-between gap-2 sm:gap-4">
             <button
               onClick={handleRegenerateImage}
@@ -186,7 +194,7 @@ const DalleIntegration = ({ onImageGenerated, onImageConfirmed, initialImage, on
         <ArtStyleSlider
           styles={suggestedStyles}
           onStyleSelect={handleStyleSelect}
-          disabled={isLoading}
+          disabled={isLoading || isImageConfirmed}
         />
       </div>
 
@@ -201,12 +209,12 @@ const DalleIntegration = ({ onImageGenerated, onImageConfirmed, initialImage, on
               onChange={(e) => setPrompt(e.target.value)}
               placeholder="Describe your vision"
               className="flex-grow px-3 py-2 rounded-l-lg bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-purple-500 text-sm sm:text-base"
-              disabled={isLoading}
+              disabled={isLoading || isImageConfirmed}
             />
             <button
               type="submit"
               className="bg-purple-600 text-white px-3 py-2 rounded-r-lg hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 flex items-center justify-center transition-colors duration-200 ease-in-out"
-              disabled={isLoading}
+              disabled={isLoading || isImageConfirmed}
             >
               {isLoading ? (
                 <RefreshCw className="w-5 h-5 animate-spin" />

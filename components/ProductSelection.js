@@ -11,7 +11,8 @@ const ProductSelection = ({
   selectedProduct, 
   onMockupGenerated, 
   isGeneratingMockup, 
-  setIsGeneratingMockup 
+  setIsGeneratingMockup,
+  isEnabled
 }) => {
   const [catalogItems, setCatalogItems] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -281,6 +282,7 @@ const ProductSelection = ({
           itemsPerPage={itemsPerPage}
           onPageChange={handlePageChange}
           generatedImageUrl={image}
+          isDisabled={!isEnabled}
         />
       ) : (
         <ProductDetails
