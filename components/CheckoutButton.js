@@ -1,5 +1,5 @@
 // components/CheckoutButton.js
-import React from 'react';
+import React, { useState } from 'react';
 import { loadStripe } from '@stripe/stripe-js';
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY);
@@ -12,13 +12,19 @@ const calculateShipping = (price) => {
   return parseFloat(shippingCost.toFixed(2)); // Round to 2 decimal places
 };
 
-const CheckoutButton = ({ product, variant, imageUrl, isMockupGenerated, setFeedbackMessage }) => {
+const CheckoutButton = ({ product, variant, imageUrl, isMockupGenerated }) => {
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [feedbackMessage, setFeedbackMessage] = useState('');
+
   const handleCheckout = async () => {
+    // Check if mockup is generated before proceeding to checkout
     if (!isMockupGenerated) {
       setFeedbackMessage('Please generate a mockup before proceeding to checkout.');
       return;
     }
 
+    setIsProcessing(true);
+    setFeedbackMessage('');
     console.log('Checkout button clicked');
     console.log('Product:', product);
     console.log('Variant:', variant);
@@ -65,22 +71,29 @@ const CheckoutButton = ({ product, variant, imageUrl, isMockupGenerated, setFeed
 
       if (result.error) {
         console.error('Stripe redirect error:', result.error.message);
-        alert('An error occurred during checkout. Please try again.');
+        setFeedbackMessage('An error occurred during checkout. Please try again.');
       }
     } catch (error) {
       console.error('Checkout error:', error);
-      alert('An error occurred during checkout. Please try again.');
+      setFeedbackMessage('An error occurred during checkout. Please try again.');
+    } finally {
+      setIsProcessing(false);
     }
   };
 
   return (
-    <button
-      onClick={handleCheckout}
-      className="w-full bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500"
-      disabled={!isMockupGenerated}
-    >
-      Proceed to Checkout
-    </button>
+    <div>
+      <button
+        onClick={handleCheckout}
+        className="w-full bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500"
+        disabled={isProcessing}
+      >
+        {isProcessing ? 'Processing...' : 'Proceed to Checkout'}
+      </button>
+      {feedbackMessage && (
+        <p className="text-yellow-500 text-sm mt-2">{feedbackMessage}</p>
+      )}
+    </div>
   );
 };
 

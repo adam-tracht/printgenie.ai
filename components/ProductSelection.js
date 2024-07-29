@@ -31,7 +31,6 @@ const ProductSelection = ({
     "Enhanced Matte Paper Poster (in)",
     "Enhanced Matte Paper Framed Poster (in)",
     "Framed Poster With Mat (cm)",
-    "T-Shirt"
   ];
 
   useEffect(() => {
