@@ -17,6 +17,12 @@ const ProductGrid = ({
   const displayedItems = products.slice(startIndex, endIndex);
   const totalPages = Math.ceil(products.length / itemsPerPage);
 
+  // Function to truncate product title at parentheses
+  const truncateTitle = (title) => {
+    const parenthesisIndex = title.indexOf('(');
+    return parenthesisIndex !== -1 ? title.slice(0, parenthesisIndex).trim() : title;
+  };
+
   if (isLoading) {
     return <div className="text-white text-center">Loading products...</div>;
   }
@@ -33,14 +39,12 @@ const ProductGrid = ({
             <div className="aspect-w-1 aspect-h-1 mb-4">
               <img
                 src={item.thumbnail_url || item.image || '/placeholder-image.jpg'}
-                alt={`${item.title} preview`}
+                alt={`${truncateTitle(item.title)} preview`}
                 className="object-cover w-full h-full rounded-lg"
               />
             </div>
-            <h3 className="text-lg font-semibold text-white mb-2">{item.title}</h3>
-            <p className="text-gray-300 mb-4">
-              {item.variant_count} variants available
-            </p>
+            {/* Use the truncateTitle function for the product title */}
+            <h3 className="text-lg font-semibold text-white mb-2">{truncateTitle(item.title)}</h3>
             <button
               onClick={() => onProductSelect(item)}
               className="w-full bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors"

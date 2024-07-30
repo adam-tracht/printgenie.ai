@@ -71,6 +71,12 @@ const ProductDetails = ({
     }
   };
 
+  // Function to truncate product title at parentheses
+  const truncateTitle = (title) => {
+    const parenthesisIndex = title.indexOf('(');
+    return parenthesisIndex !== -1 ? title.slice(0, parenthesisIndex).trim() : title;
+  };
+
   const getFirstSentence = (description) => {
     if (!description) return "No description available.";
     const match = description.match(/^.*?[.!?](?:\s|$)/);
@@ -107,7 +113,7 @@ const ProductDetails = ({
           <div className="relative aspect-w-1 aspect-h-1">
             <img 
               src={mockupUrl || (localSelectedVariant && localSelectedVariant.image) || product.thumbnail_url || product.image || '/placeholder-image.jpg'} 
-              alt={product.title} 
+              alt={truncateTitle(product.title)} 
               className="object-cover w-full h-full rounded-lg"
             />
             <button 
@@ -120,7 +126,7 @@ const ProductDetails = ({
         </div>
         <div className="space-y-4">
           <div>
-            <h3 className="text-xl font-bold text-white">{product.title}</h3>
+            <h3 className="text-xl font-bold text-white">{truncateTitle(product.title)}</h3>
             <p className="text-gray-300 text-sm">
               {getFirstSentence(product.description)}
             </p>
@@ -173,7 +179,7 @@ const ProductDetails = ({
           <CheckoutButton 
             product={{
               id: product.id,
-              name: `${product.title} - ${localSelectedVariant ? localSelectedVariant.name : ''}`,
+              name: `${truncateTitle(product.title)} - ${localSelectedVariant ? localSelectedVariant.name : ''}`,
             }}
             variant={localSelectedVariant && {
               id: localSelectedVariant.id,
