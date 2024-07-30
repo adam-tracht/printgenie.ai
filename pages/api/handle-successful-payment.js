@@ -93,8 +93,8 @@ export default async function handler(req, res) {
 }
 
 async function createPrintfulOrder(session) {
-  const { productId, variantId, mockupUrl } = session.metadata;
-  console.log('Creating Printful order with metadata:', { productId, variantId, mockupUrl });
+  const { productId, variantId, mockupUrl, originalImageUrl } = session.metadata;
+  console.log('Creating Printful order with metadata:', { productId, variantId, mockupUrl, originalImageUrl });
 
   // Fetch printfiles for the product
   console.log('Fetching printfiles...');
@@ -140,7 +140,7 @@ async function createPrintfulOrder(session) {
         quantity: 1,
         files: [
           {
-            url: mockupUrl, // Use the mockup URL here
+            url: originalImageUrl, // Use the original image URL here
             type: placement
           }
         ]

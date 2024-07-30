@@ -12,7 +12,7 @@ const calculateShipping = (price) => {
   return parseFloat(shippingCost.toFixed(2)); // Round to 2 decimal places
 };
 
-const CheckoutButton = ({ product, variant, imageUrl, imageId, isMockupGenerated }) => {
+const CheckoutButton = ({ product, variant, imageUrl, originalImageUrl, imageId, isMockupGenerated }) => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [feedbackMessage, setFeedbackMessage] = useState('');
 
@@ -50,7 +50,8 @@ const CheckoutButton = ({ product, variant, imageUrl, imageId, isMockupGenerated
           product: product,
           variant: variant,
           imageUrl: imageUrl,
-          imageId: imageId, // Include the image ID in the request
+          originalImageUrl: originalImageUrl, // Add this line
+          imageId: imageId,
           shippingCost: shippingCost,
         }),
       });
