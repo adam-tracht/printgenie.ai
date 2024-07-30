@@ -148,42 +148,7 @@ const MainAppFlow = () => {
       </section>
 
       {/* Step 3: Preview and Checkout */}
-      <section className={`mb-12 ${!selectedProduct || !selectedVariant ? 'opacity-50 pointer-events-none' : ''}`}>
-        <h2 className="text-2xl font-bold text-white mb-4">Step 3: Preview and Checkout</h2>
-        {(!selectedProduct || !selectedVariant) && (
-          <p className="text-gray-300 mb-4">Please select a product and variant in Step 2 to checkout.</p>
-        )}
-        {selectedProduct && selectedVariant && (
-          <div className="text-center">
-            {mockupImage ? (
-              <img src={mockupImage} alt="Product Mockup" className="w-64 h-64 mx-auto mb-4 rounded-lg shadow-lg" />
-            ) : (
-              <div className="w-64 h-64 mx-auto mb-4 bg-gray-700 rounded-lg flex items-center justify-center">
-                <p className="text-white">Mockup not available</p>
-              </div>
-            )}
-            <p className="text-lg text-gray-300 mb-4">Product: {selectedProduct.title}</p>
-            <p className="text-lg text-gray-300 mb-4">Variant: {selectedVariant.name}</p>
-            <p className="text-xl text-white mb-6">Price: ${formatPrice(selectedVariant.sellingPrice)}</p>
-            {feedbackMessage && <p className="text-yellow-500 mb-4">{feedbackMessage}</p>}
-            <CheckoutButton 
-              product={{
-                id: selectedProduct.id,
-                name: `${selectedProduct.title} - ${selectedVariant.name}`,
-              }}
-              variant={{
-                id: selectedVariant.id,
-                name: selectedVariant.name,
-                price: selectedVariant.sellingPrice
-              }}
-              imageUrl={mockupImage}
-              imageId={generatedImageId} // Pass the image ID to the CheckoutButton
-              isMockupGenerated={!!mockupImage}
-              setFeedbackMessage={setFeedbackMessage}
-            />
-          </div>
-        )}
-      </section>
+      
     </div>
   );
 };

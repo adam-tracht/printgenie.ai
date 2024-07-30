@@ -3,7 +3,6 @@ import React, { useState, useEffect } from 'react';
 import { ZoomIn } from 'lucide-react';
 import CheckoutButton from './CheckoutButton';
 import ProductVariantSelector from './ProductVariantSelector';
-import GeneratedImageDisplay from './GeneratedImageDisplay';
 
 const ProductDetails = ({ 
   product, 
@@ -109,9 +108,9 @@ const ProductDetails = ({
           Back to All Products
         </button>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="space-y-4">
-          <div className="relative aspect-w-1 aspect-h-1">
+          <div className="relative mb-8 aspect-w-1 aspect-h-1">
             <img 
               src={mockupUrl || (localSelectedVariant && localSelectedVariant.image) || product.thumbnail_url || product.image || '/placeholder-image.jpg'} 
               alt={truncateTitle(product.title)} 
@@ -147,11 +146,6 @@ const ProductDetails = ({
           
           {feedbackMessage && <p className="text-yellow-500 text-sm mt-2">{feedbackMessage}</p>}
         </div>
-      </div>
-      
-      {/* GeneratedImageDisplay component placed beneath the product details */}
-      <div className="mt-8 mb-24 md:mb-0">
-        <GeneratedImageDisplay imageUrl={generatedImageUrl} altText="Your generated artwork" />
       </div>
 
       {/* Zoomed Image Modal */}
