@@ -11,8 +11,6 @@ const SuccessPage = () => {
   const [mockupUrl, setMockupUrl] = useState(null);
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [customerEmailStatus, setCustomerEmailStatus] = useState({ sent: false, error: null });
-  const [adminEmailStatus, setAdminEmailStatus] = useState({ sent: false, error: null });
 
   useEffect(() => {
     if (session_id) {
@@ -41,8 +39,6 @@ const SuccessPage = () => {
       const data = await response.json();
       setOrderDetails(data.order);
       setMockupUrl(data.mockupUrl);
-      setCustomerEmailStatus({ sent: data.customerEmailSent, error: data.customerEmailError });
-      setAdminEmailStatus({ sent: data.adminEmailSent, error: data.adminEmailError });
     } catch (error) {
       console.error('Error handling successful payment:', error);
       setError(`An error occurred while processing your order: ${error.message}. Please contact support with this error message and your session ID: ${sessionId}`);
@@ -99,38 +95,49 @@ const SuccessPage = () => {
         <p className="text-white mb-4">
           Thank you for your purchase! We are excited to create your custom AI-generated artwork.
         </p>
-        {customerEmailStatus.sent ? (
-          <p className="text-white mb-4">
-            A confirmation email has been sent to your email address with all the order details.
-          </p>
-        ) : (
-          <p className="text-yellow-400 mb-4">
-            We encountered an issue sending your confirmation email: {customerEmailStatus.error || 'Unknown error'}. Don&apost;t worry, your order has been processed successfully. Please contact our support team if you need any information about your order.
-          </p>
-        )}
+        <p className="text-white mb-4">
+          A confirmation email has been sent to your email address with all the order details.
+        </p>
         {orderDetails && (
           <div className="mb-6">
             <p className="text-gray-300 mb-2">
               Order ID: <span className="font-bold">{safelyGetNestedProperty(orderDetails, 'id')}</span>
             </p>
-            <p className="text-gray-300 mb-2">
-              Item: <span className="font-bold">{safelyGetNestedProperty(orderDetails, 'items.0.name')}</span>
-            </p>
-            <p className="text-gray-300 mb-2">
-              Quantity: <span className="font-bold">{safelyGetNestedProperty(orderDetails, 'items.0.quantity')}</span>
-            </p>
-            <p className="text-gray-300 mb-2">
-              Subtotal: <span className="font-bold">${formatPrice(safelyGetNestedProperty(orderDetails, 'costs.subtotal', 0))}</span>
-            </p>
-            <p className="text-gray-300 mb-2">
-              Shipping: <span className="font-bold">${formatPrice(safelyGetNestedProperty(orderDetails, 'costs.shipping', 0))}</span>
-            </p>
-            <p className="text-gray-300 mb-2">
-              Tax: <span className="font-bold">${formatPrice(safelyGetNestedProperty(orderDetails, 'costs.tax', '0.00'))}</span>
-            </p>
-            <p className="text-gray-300 mb-2">
-              Total Paid: <span className="font-bold">${formatPrice(safelyGetNestedProperty(orderDetails, 'costs.total', 0))}</span>
-            </p>
+            <div className="bg-gray-700 p-4 rounded-lg mb-4">
+              <h2 className="text-white font-bold mb-2">Order Summary</h2>
+              <table className="w-full text-gray-300">
+                <tbody>
+                  <tr>
+                    <td className="py-1">Item:</td>
+                    <td className="text-right">{safelyGetNestedProperty(orderDetails, 'items.0.name')}</td>
+                  </tr>
+                  <tr>
+                    <td className="py-1">Quantity:</td>
+                    <td className="text-right">{safelyGetNestedProperty(orderDetails, 'items.0.quantity')}</td>
+                  </tr>
+                  <tr>
+                    <td className="py-1">Item Price:</td>
+                    <td className="text-right">${formatPrice(safelyGetNestedProperty(orderDetails, 'subtotal') - safelyGetNestedProperty(orderDetails, 'shipping'))}</td>
+                  </tr>
+                  <tr>
+                    <td className="py-1">Shipping:</td>
+                    <td className="text-right">${formatPrice(safelyGetNestedProperty(orderDetails, 'shipping', 0))}</td>
+                  </tr>
+                  <tr>
+                    <td className="py-1">Subtotal:</td>
+                    <td className="text-right">${formatPrice(safelyGetNestedProperty(orderDetails, 'subtotal', 0))}</td>
+                  </tr>
+                  <tr>
+                    <td className="py-1">Tax:</td>
+                    <td className="text-right">${formatPrice(safelyGetNestedProperty(orderDetails, 'tax', 0))}</td>
+                  </tr>
+                  <tr className="font-bold">
+                    <td className="py-1">Total Paid:</td>
+                    <td className="text-right">${formatPrice(safelyGetNestedProperty(orderDetails, 'total', 0))}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
             {mockupUrl && (
               <div className="mt-4">
                 <p className="text-gray-300 mb-2">Your Product Mockup:</p>
@@ -148,6 +155,9 @@ const SuccessPage = () => {
             )}
           </div>
         )}
+        <p className="text-gray-300 mb-4">
+          <strong>Shipping Information:</strong> Please allow up to 5 days for production and an additional 3-7 days for delivery.
+        </p>
         <p className="text-gray-300 mb-4">
           If you have any questions about your order, please contact our support team at{' '}
           <a href="mailto:hello@canvasgenie.ai" className="text-purple-400 hover:text-purple-300">

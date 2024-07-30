@@ -41,13 +41,17 @@ export default async function handler(req, res) {
 
     // Calculate the total from the Stripe session
     const total = session.amount_total / 100; // Convert from cents to dollars
+    const subtotal = session.amount_subtotal / 100;
+    const tax = session.total_details.amount_tax / 100;
+    const shipping = parseFloat(session.metadata.shippingCost);
 
-    // Add the total, subtotal, tax, and customer email to the order details
+    // Add the total, subtotal, tax, shipping, and customer email to the order details
     const orderWithDetails = {
       ...printfulOrder,
       total: total,
-      subtotal: session.amount_subtotal / 100,
-      tax: session.total_details.amount_tax / 100,
+      subtotal: subtotal,
+      tax: tax,
+      shipping: shipping,
       recipient: {
         ...printfulOrder.recipient,
         email: session.customer_details.email,
