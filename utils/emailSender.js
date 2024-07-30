@@ -83,7 +83,7 @@ async function sendOrderConfirmationEmail(orderDetails, mockupUrl) {
             <h1>Order Confirmation</h1>
           </div>
           <div class="content">
-            <p>Thank you for your purchase! We're excited to create your custom AI-generated artwork.</p>
+            <p>Thank you for your purchase! We're excited to create your custom AI-generated artwork. Please allow up to 5 days for production and an additional 3-7 days for delivery.</p>
             
             <div class="order-details">
               <h2>Order Details:</h2>

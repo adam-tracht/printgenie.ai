@@ -16,13 +16,13 @@ const DalleIntegration = ({ onImageGenerated, onImageConfirmed, initialImage, on
 
   const suggestedStyles = [
     { name: 'Abstract Minimalism', content: 'Abstract minimalist modern', image: '/images/gallery/minimalist.jpg' },
-    { name: 'Neo-Expressionism', content: 'Neo-expressionist wall art with bold brushstrokes, vivid colors, and emotional intensity', image: '/images/gallery/neo-expressionism.jpg' },
-    { name: 'Desert Minimalism', content: 'Minimalist desert landscape wall art with muted earth tones and occasional pops of vibrant color, featuring simple geometric shapes and clean lines', image: '/images/gallery/desert-minimalist.jpg' },
-    { name: 'Bohemian Chic', content: 'A Bohemian chic art piece featuring warm earthy tones, intricate patterns, and a mix of textures', image: '/images/gallery/bohemian.jpg' },
+    { name: 'Neo-Expressionism', content: 'Neo-expressionism with bold brushstrokes, vivid colors, and emotional intensity', image: '/images/gallery/neo-expressionism.jpg' },
+    { name: 'Desert Minimalism', content: 'Minimalist desert landscape with muted earth tones and occasional pops of vibrant color, featuring simple geometric shapes and clean lines', image: '/images/gallery/desert-minimalist.jpg' },
+    { name: 'Geometric Patterns', content: 'Intricate geometric patterns, precise lines, and a harmonious color scheme', image: '/images/gallery/geometric-patterns.jpg' },
     { name: 'Digital Surrealism', content: 'Digital surrealist blending dreamlike elements with hyper-realistic details', image: '/images/gallery/digital-surrealism.jpg' },
     { name: 'Modern Pop Art', content: 'Modern pop art with bright colors, bold outlines, and contemporary cultural references', image: '/images/gallery/modern-pop-art.jpg' },
     { name: 'Organic Textures', content: 'Organic textures inspired by nature, with flowing forms and subtle gradients', image: '/images/gallery/organic-textures.jpg' },
-    { name: 'Geometric Patterns', content: 'Wall art with intricate geometric patterns, precise lines, and a harmonious color scheme', image: '/images/gallery/geometric-patterns.jpg' }
+    { name: 'Bohemian Chic', content: 'Bohemian chic patterns abstract', image: '/images/gallery/bohemian.jpg' }
   ];
 
   useEffect(() => {

@@ -42,7 +42,7 @@ export default async function handler(req, res) {
     jobStatus.set(newJobId, { status: 'processing' });
 
     // Add instructions to the prompt
-    const modifiedPrompt = `Please generate the image as described. Do not include the term "wall art" in any context or expand with verbose descriptions. ${prompt}`;
+    const modifiedPrompt = `Please generate the image as described. Do not add context or expand with verbose descriptions. ${prompt}`;
 
     // Start the image generation process asynchronously
     generateImage(newJobId, modifiedPrompt);
