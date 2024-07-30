@@ -27,7 +27,6 @@ const MainAppFlow = () => {
   const [isImageConfirmed, setIsImageConfirmed] = useState(false);
 
   const step2Ref = useRef(null);
-  const step3Ref = useRef(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -103,9 +102,7 @@ const MainAppFlow = () => {
     console.log("Mockup generated in MainAppFlow:", mockupUrl);
     setMockupImage(mockupUrl);
     setIsGeneratingMockup(false);
-    if (step3Ref.current) {
-      step3Ref.current.scrollIntoView({ behavior: 'smooth' });
-    }
+    // Removed the automatic scrolling here
   };
 
   // Helper function to format price
@@ -152,7 +149,7 @@ const MainAppFlow = () => {
       </section>
 
       {/* Step 3: Preview and Checkout */}
-      <section ref={step3Ref} className={`mb-12 ${!selectedProduct || !selectedVariant ? 'opacity-50 pointer-events-none' : ''}`}>
+      <section className={`mb-12 ${!selectedProduct || !selectedVariant ? 'opacity-50 pointer-events-none' : ''}`}>
         <h2 className="text-2xl font-bold text-white mb-4">Step 3: Preview and Checkout</h2>
         {(!selectedProduct || !selectedVariant) && (
           <p className="text-gray-300 mb-4">Please select a product and variant in Step 2 to checkout.</p>
