@@ -102,7 +102,6 @@ const MainAppFlow = () => {
     console.log("Mockup generated in MainAppFlow:", mockupUrl);
     setMockupImage(mockupUrl);
     setIsGeneratingMockup(false);
-    // Removed the automatic scrolling here
   };
 
   // Helper function to format price
@@ -178,6 +177,7 @@ const MainAppFlow = () => {
                 price: selectedVariant.sellingPrice
               }}
               imageUrl={mockupImage}
+              imageId={generatedImageId} // Pass the image ID to the CheckoutButton
               isMockupGenerated={!!mockupImage}
               setFeedbackMessage={setFeedbackMessage}
             />

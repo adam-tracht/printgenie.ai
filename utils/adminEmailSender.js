@@ -10,7 +10,7 @@ async function sendAdminNotificationEmail(orderDetails, mockupUrl) {
 
   const msg = {
     to: 'hello@canvasgenie.ai',
-    from: 'notifications@canvasgenie.ai', // This email should be verified with SendGrid
+    from: 'hello@canvasgenie.ai', // This email should be verified with SendGrid
     subject: 'New Order Notification - CanvasGenie.ai',
     html: `
       <!DOCTYPE html>

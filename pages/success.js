@@ -11,7 +11,8 @@ const SuccessPage = () => {
   const [mockupUrl, setMockupUrl] = useState(null);
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [emailSent, setEmailSent] = useState(true);
+  const [customerEmailStatus, setCustomerEmailStatus] = useState({ sent: false, error: null });
+  const [adminEmailStatus, setAdminEmailStatus] = useState({ sent: false, error: null });
 
   useEffect(() => {
     if (session_id) {
@@ -40,7 +41,8 @@ const SuccessPage = () => {
       const data = await response.json();
       setOrderDetails(data.order);
       setMockupUrl(data.mockupUrl);
-      setEmailSent(data.emailSent);
+      setCustomerEmailStatus({ sent: data.customerEmailSent, error: data.customerEmailError });
+      setAdminEmailStatus({ sent: data.adminEmailSent, error: data.adminEmailError });
     } catch (error) {
       console.error('Error handling successful payment:', error);
       setError(`An error occurred while processing your order: ${error.message}. Please contact support with this error message and your session ID: ${sessionId}`);
@@ -95,15 +97,15 @@ const SuccessPage = () => {
       <div className="bg-gray-800 p-8 rounded-lg shadow-xl max-w-md w-full">
         <h1 className="text-3xl font-bold text-green-500 mb-4">Order Successful!</h1>
         <p className="text-white mb-4">
-          Thank you for your purchase! We're excited to create your custom AI-generated artwork.
+          Thank you for your purchase! We&apost;re excited to create your custom AI-generated artwork.
         </p>
-        {emailSent ? (
+        {customerEmailStatus.sent ? (
           <p className="text-white mb-4">
             A confirmation email has been sent to your email address with all the order details.
           </p>
         ) : (
           <p className="text-yellow-400 mb-4">
-            We encountered an issue sending your confirmation email. Don't worry, your order has been processed successfully. Please contact our support team if you need any information about your order.
+            We encountered an issue sending your confirmation email: {customerEmailStatus.error || 'Unknown error'}. Don&apost;t worry, your order has been processed successfully. Please contact our support team if you need any information about your order.
           </p>
         )}
         {orderDetails && (

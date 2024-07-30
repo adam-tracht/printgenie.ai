@@ -12,7 +12,7 @@ const calculateShipping = (price) => {
   return parseFloat(shippingCost.toFixed(2)); // Round to 2 decimal places
 };
 
-const CheckoutButton = ({ product, variant, imageUrl, isMockupGenerated }) => {
+const CheckoutButton = ({ product, variant, imageUrl, imageId, isMockupGenerated }) => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [feedbackMessage, setFeedbackMessage] = useState('');
 
@@ -29,6 +29,7 @@ const CheckoutButton = ({ product, variant, imageUrl, isMockupGenerated }) => {
     console.log('Product:', product);
     console.log('Variant:', variant);
     console.log('Image URL:', imageUrl);
+    console.log('Image ID:', imageId);
 
     // Calculate shipping cost
     const shippingCost = calculateShipping(variant.price);
@@ -49,6 +50,7 @@ const CheckoutButton = ({ product, variant, imageUrl, isMockupGenerated }) => {
           product: product,
           variant: variant,
           imageUrl: imageUrl,
+          imageId: imageId, // Include the image ID in the request
           shippingCost: shippingCost,
         }),
       });

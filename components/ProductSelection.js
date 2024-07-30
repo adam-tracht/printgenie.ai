@@ -5,7 +5,7 @@ import ProductDetails from './ProductDetails';
 
 const ProductSelection = ({ 
   image, 
-  originalImageUrl, 
+  imageId,
   onProductSelected, 
   onVariantSelected, 
   selectedProduct, 
@@ -292,8 +292,9 @@ const ProductSelection = ({
           mockupUrl={mockupUrl}
           isGeneratingMockup={isGeneratingMockup}
           handleBackToGrid={handleBackToGrid}
-          originalImageUrl={originalImageUrl}
+          originalImageUrl={image}
           generatedImageUrl={image}
+          imageId={imageId} // Pass the image ID to ProductDetails
         />
       )}
     </div>

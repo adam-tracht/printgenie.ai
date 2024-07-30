@@ -56,29 +56,35 @@ export default async function handler(req, res) {
 
     // Send order confirmation email
     let customerEmailSent = false;
+    let customerEmailError = null;
     try {
       await sendOrderConfirmationEmail(orderWithDetails, mockupUrl);
       console.log('Order confirmation email sent successfully to customer');
       customerEmailSent = true;
     } catch (emailError) {
       console.error('Failed to send order confirmation email to customer:', emailError);
+      customerEmailError = emailError.message;
     }
 
     // Send admin notification email
     let adminEmailSent = false;
+    let adminEmailError = null;
     try {
       await sendAdminNotificationEmail(orderWithDetails, mockupUrl);
       console.log('Admin notification email sent successfully');
       adminEmailSent = true;
     } catch (adminEmailError) {
       console.error('Failed to send admin notification email:', adminEmailError);
+      adminEmailError = adminEmailError.message;
     }
 
     res.status(200).json({ 
       order: orderWithDetails, 
       mockupUrl,
       customerEmailSent,
-      adminEmailSent
+      customerEmailError,
+      adminEmailSent,
+      adminEmailError
     });
   } catch (error) {
     console.error('Error handling successful payment:', error);

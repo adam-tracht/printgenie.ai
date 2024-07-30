@@ -14,7 +14,8 @@ const ProductDetails = ({
   isGeneratingMockup, 
   handleBackToGrid,
   originalImageUrl,
-  generatedImageUrl
+  generatedImageUrl,
+  imageId // Add imageId to the props
 }) => {
   const [error, setError] = useState('');
   const [zoomedImage, setZoomedImage] = useState(null);
@@ -187,6 +188,7 @@ const ProductDetails = ({
               price: localSelectedVariant.sellingPrice
             }}
             imageUrl={mockupUrl}
+            imageId={imageId} // Pass the image ID to the CheckoutButton
             originalImageUrl={originalImageUrl}
             isMockupGenerated={isMockupGenerated}
             setFeedbackMessage={setFeedbackMessage}

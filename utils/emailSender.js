@@ -6,7 +6,7 @@ sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 // Function to send order confirmation email
 async function sendOrderConfirmationEmail(orderDetails, mockupUrl) {
-  const { recipient, id, items, total } = orderDetails;
+  const { recipient, id, items, total, subtotal, tax } = orderDetails;
 
   const msg = {
     to: recipient.email,
