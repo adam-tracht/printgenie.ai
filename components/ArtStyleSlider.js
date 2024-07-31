@@ -24,7 +24,7 @@ const ArtStyleSlider = ({ styles, onStyleSelect, disabled }) => {
         {currentStyles.map((style, index) => (
           <div
             key={index}
-            className={`bg-gray-800 rounded-lg overflow-hidden transition-transform hover:scale-105 ${
+            className={`bg-gray-800 rounded-lg p-4 shadow-lg transition-transform hover:scale-105 ${
               disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'
             }`}
             onClick={() => !disabled && onStyleSelect(style)}
@@ -33,13 +33,19 @@ const ArtStyleSlider = ({ styles, onStyleSelect, disabled }) => {
               <Image
                 src={style.image}
                 alt={style.name}
-                layout="fill"
-                objectFit="cover"
+                fill
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                style={{ objectFit: 'cover' }}
+                className="rounded-lg"
               />
             </div>
-            <div className="p-2 text-center">
+            <div className="pt-2 mt-2">
               <p className="text-sm font-semibold text-white">{style.name}</p>
             </div>
+            <p className="w-full mx-auto my-4 text-center bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors">
+              Create
+            </p>
+
           </div>
         ))}
       </div>

@@ -33,7 +33,7 @@ const ProductGrid = ({
 
   return (
     <div>
-      <div className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 ${isDisabled ? 'opacity-50 pointer-events-none' : ''}`}>
+      <div className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 ${isDisabled ? 'opacity-50 pointer-events-none' : ''}`}>
         {displayedItems.map((item) => (
           <div key={item.id} className="bg-gray-900 rounded-lg p-4 shadow-lg transition-transform hover:scale-105">
             <div className="aspect-w-1 aspect-h-1 mb-4">

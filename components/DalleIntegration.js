@@ -190,7 +190,8 @@ const DalleIntegration = ({ onImageGenerated, onImageConfirmed, initialImage, on
       </div>
 
       <div className="mb-6">
-        <h3 className="text-xl font-semibold text-white mb-2">Choose a Style</h3>
+        <p className="text-white mb-6">Generate a unique image by selecting a style or writing your own prompt.</p>
+
         <ArtStyleSlider
           styles={suggestedStyles}
           onStyleSelect={handleStyleSelect}
