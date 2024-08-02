@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Send, RefreshCw, Info, Trash2 } from 'lucide-react';
 import ArtStyleSlider from './ArtStyleSlider';
+import ImageGenerationLoadingScreen from './ImageGenerationLoadingScreen';
 
 const DalleIntegration = ({ onImageGenerated, onImageConfirmed, initialImage, onImageReset }) => {
   const [prompt, setPrompt] = useState('');
@@ -150,26 +151,22 @@ const DalleIntegration = ({ onImageGenerated, onImageConfirmed, initialImage, on
       <h2 className="text-2xl font-bold text-white mb-4">Step 1: Create your artwork</h2>
      
       <div ref={imageRef}>
-        {(isLoading || generatedImageUrl) && (
+        {isLoading ? (
+          <ImageGenerationLoadingScreen prompt={prompt} />
+        ) : generatedImageUrl ? (
           <div className="mb-6 relative aspect-square">
-            {isLoading ? (
-              <div className="absolute inset-0 flex items-center justify-center bg-gray-800 rounded-lg">
-                <RefreshCw className="w-12 h-12 animate-spin text-purple-500" />
-              </div>
-            ) : (
-              <div className="relative">
-                <img src={generatedImageUrl} alt="Generated artwork" className="w-full h-full object-cover rounded-lg shadow-lg" />
-                <button
-                  onClick={handleResetImage}
-                  className="absolute bottom-2 right-2 bg-gray-800 bg-opacity-75 text-white p-2 rounded-full hover:bg-opacity-100 transition-colors"
-                  aria-label="Reset image"
-                >
-                  <Trash2 size={20} />
-                </button>
-              </div>
-            )}
+            <div className="relative">
+              <img src={generatedImageUrl} alt="Generated artwork" className="w-full h-full object-cover rounded-lg shadow-lg" />
+              <button
+                onClick={handleResetImage}
+                className="absolute bottom-2 right-2 bg-gray-800 bg-opacity-75 text-white p-2 rounded-full hover:bg-opacity-100 transition-colors"
+                aria-label="Reset image"
+              >
+                <Trash2 size={20} />
+              </button>
+            </div>
           </div>
-        )}
+        ) : null}
 
         {generatedImageUrl && !isImageConfirmed && (
           <div className="mb-6 flex flex-col sm:flex-row justify-between gap-2 sm:gap-4">
