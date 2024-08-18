@@ -16,7 +16,7 @@ const DalleIntegration = ({ onImageGenerated, onImageConfirmed, initialImage, on
   const imageRef = useRef(null);
 
   const suggestedStyles = [
-    { name: 'Abstract Minimalism', content: 'Abstract minimalist modern', image: '/images/gallery/minimalist.jpg' },
+    { name: 'Abstract Minimalism', content: 'Modern Abstract minimalism', image: '/images/gallery/minimalist.jpg' },
     { name: 'Neo-Expressionism', content: 'Neo-expressionism with bold brushstrokes, vivid colors, and emotional intensity', image: '/images/gallery/neo-expressionism.jpg' },
     { name: 'Desert Minimalism', content: 'Minimalist desert landscape with muted earth tones and occasional pops of vibrant color, featuring simple geometric shapes and clean lines', image: '/images/gallery/desert-minimalist.jpg' },
     { name: 'Geometric Patterns', content: 'Intricate geometric patterns, precise lines, and a harmonious color scheme', image: '/images/gallery/geometric-patterns.jpg' },

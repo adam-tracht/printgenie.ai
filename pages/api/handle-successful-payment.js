@@ -3,6 +3,7 @@ import Stripe from 'stripe';
 import axios from 'axios';
 import { sendOrderConfirmationEmail } from '../../utils/emailSender';
 import { sendAdminNotificationEmail } from '../../utils/adminEmailSender';
+import { upscaleImage } from '../../utils/pixelcutAi';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 const printfulApi = axios.create({
@@ -31,9 +32,14 @@ export default async function handler(req, res) {
     });
     console.log('Stripe session retrieved:', session);
 
-    // Create Printful order
+    // Upscale the original image
+    const originalImageUrl = session.metadata.originalImageUrl;
+    const upscaledImageUrl = await upscaleImage(originalImageUrl);
+    console.log('Image upscaled:', upscaledImageUrl);
+
+    // Create Printful order with upscaled image
     console.log('Creating Printful order...');
-    const printfulOrder = await createPrintfulOrder(session);
+    const printfulOrder = await createPrintfulOrder(session, upscaledImageUrl);
     console.log('Printful order created:', printfulOrder);
 
     // Get the mockup URL from the session metadata
@@ -96,9 +102,9 @@ export default async function handler(req, res) {
   }
 }
 
-async function createPrintfulOrder(session) {
-  const { productId, variantId, mockupUrl, originalImageUrl } = session.metadata;
-  console.log('Creating Printful order with metadata:', { productId, variantId, mockupUrl, originalImageUrl });
+async function createPrintfulOrder(session, upscaledImageUrl) {
+  const { productId, variantId, mockupUrl } = session.metadata;
+  console.log('Creating Printful order with metadata:', { productId, variantId, mockupUrl, upscaledImageUrl });
 
   // Fetch printfiles for the product
   console.log('Fetching printfiles...');
@@ -144,7 +150,7 @@ async function createPrintfulOrder(session) {
         quantity: 1,
         files: [
           {
-            url: originalImageUrl, // Use the original image URL here
+            url: upscaledImageUrl, // Use the upscaled image URL here
             type: placement
           }
         ]

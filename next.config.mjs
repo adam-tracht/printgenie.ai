@@ -8,7 +8,8 @@ const nextConfig = {
       'files.cdn.printful.com',
       'printful-upload.s3-accelerate.amazonaws.com',
       'via.placeholder.com',
-      'oaidalleapiprodscus.blob.core.windows.net'
+      'oaidalleapiprodscus.blob.core.windows.net',
+      'api.developer.pixelcut.ai'
     ],
   },
   async rewrites() {

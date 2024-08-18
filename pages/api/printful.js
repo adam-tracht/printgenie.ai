@@ -1,6 +1,7 @@
 //pages/api/printful.js
 import axios from 'axios';
 import NodeCache from 'node-cache';
+import { upscaleImage } from '../../utils/pixelcutAi';
 
 const PRINTFUL_ACCESS_TOKEN = process.env.PRINTFUL_ACCESS_TOKEN;
 
@@ -107,23 +108,71 @@ export default async function handler(req, res) {
         return res.status(200).json(response.data);
 
         case 'createOrder':
-          response = await printfulApi.post('/orders', data);
-          console.log('Order created:', response.data);
+        try {
+          console.log('Original image URL:', data.items[0].files[0].url);
+          const originalFileSize = await checkFileSize(data.items[0].files[0].url);
+          console.log(`Original file size: ${originalFileSize} bytes (${(originalFileSize / 1024 / 1024).toFixed(2)} MB)`);
+
+          console.log('Attempting to upscale image');
+          const upscaledImageUrl = await upscaleImage(data.items[0].files[0].url, 4096); // Set target size to 4096
+          console.log('Image successfully upscaled:', upscaledImageUrl);
+
+          const upscaledFileSize = await checkFileSize(upscaledImageUrl);
+          console.log(`Upscaled file size: ${upscaledFileSize} bytes (${(upscaledFileSize / 1024 / 1024).toFixed(2)} MB)`);
+
+          // Update the order data with the upscaled image URL
+          const updatedOrderData = {
+            ...data,
+            items: [
+              {
+                ...data.items[0],
+                files: [
+                  {
+                    ...data.items[0].files[0],
+                    url: upscaledImageUrl
+                  }
+                ]
+              }
+            ]
+          };
+
+          console.log('Sending order to Printful with upscaled image');
+          response = await printfulApi.post('/orders', updatedOrderData);
+          console.log('Order created with upscaled image:', response.data);
           return res.status(200).json(response.data);
-  
-        default:
-          console.log('Invalid action');
-          return res.status(400).json({ error: 'Invalid action' });
-      }
-    } catch (error) {
-      console.error('Printful API error:', error.message);
-      console.error('Error stack:', error.stack);
-      console.error('Error details:', error.response?.data);
-      res.status(error.response?.status || 500).json({ 
-        error: 'Error processing Printful request', 
-        details: error.message,
-        stack: error.stack,
-        apiResponse: error.response?.data 
-      });
+        } catch (error) {
+          console.error('Error during image upscaling or order creation:', error);
+          console.error('Error details:', error.response?.data);
+
+          // If upscaling fails or the order creation fails, proceed with the original image
+          console.log('Proceeding with original image due to error');
+          try {
+            response = await printfulApi.post('/orders', data);
+            console.log('Order created with original image:', response.data);
+            return res.status(200).json({
+              ...response.data,
+              warning: 'Order created with original image due to upscaling or order creation error'
+            });
+          } catch (originalImageError) {
+            console.error('Error creating order with original image:', originalImageError);
+            console.error('Error details:', originalImageError.response?.data);
+            throw originalImageError;
+          }
+        }
+
+      default:
+        console.log('Invalid action');
+        return res.status(400).json({ error: 'Invalid action' });
     }
+  } catch (error) {
+    console.error('Printful API error:', error.message);
+    console.error('Error stack:', error.stack);
+    console.error('Error details:', error.response?.data);
+    res.status(error.response?.status || 500).json({ 
+      error: 'Error processing Printful request', 
+      details: error.message,
+      stack: error.stack,
+      apiResponse: error.response?.data 
+    });
   }
+}
